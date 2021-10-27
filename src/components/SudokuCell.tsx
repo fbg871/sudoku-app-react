@@ -1,3 +1,4 @@
+import { setUncaughtExceptionCaptureCallback } from 'process';
 import React, { useState } from 'react';
 
 const row = [0, 1, 2, 3, 4, 5, 6, 7, 8];
@@ -34,16 +35,29 @@ interface IProps {
 
 const SudokuCell: React.FC<IProps> = ({ cell }) => {
 
-    function highlightCell(numindex:number) {
-        cell.map((cell) => 
-            {
-                if(cell.index == numindex){
-                    cell.isSelected = true;
-                }
+    function highlightCell(numindex: number) {
+        cell.map((cell) => {
+            if (cell.index == numindex) {
+                cell.isSelected = true;
             }
+        }
         )
     }
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInput({
+
+        })
+    }
+
+    const maxLengthCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value.length > parseInt(e.target.max,10)) {
+            e.target.value = e.target.value.slice(0, parseInt(e.target.max,10))
+        }
+        if (parseInt(e.target.value) <= 0) {
+            e.target.value = ""
+        }
+    }
     return (
         // <div>
         //     {
@@ -64,11 +78,14 @@ const SudokuCell: React.FC<IProps> = ({ cell }) => {
                         data-isboldleft={cell.isBoldLeft}
                         data-isboldright={cell.isBoldRight}
                         onClick={() => highlightCell(cell.index)}
-                        >
+                        onChange{() => handleChange(cell.index)}
+                    >
                         <input
                             className="cell-input"
-                            type="text"
+                            type="number"
                             max="1"
+                            onInput={maxLengthCheck}
+                            onChange={handleChange}
                             defaultValue={cell.value}></input>
                     </div>)
             }

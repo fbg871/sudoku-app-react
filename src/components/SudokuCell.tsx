@@ -1,8 +1,11 @@
 import { setUncaughtExceptionCaptureCallback } from 'process';
 import React, { useState } from 'react';
 import { IState as Props } from "./SudokuGrid";
+import blockInvalid from "./blockInvalid"
 
 const row = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+const valid_inputs = [1,2,3,4,5,6,7,8,9];
 
 const sudoku_test = [
     [6, 0, 0, 0, 4, 3, 0, 0, 0],
@@ -16,6 +19,18 @@ const sudoku_test = [
     [0, 5, 0, 1, 0, 0, 0, 0, 0]
 ]
 
+const solved_test = [
+    [6,8,7,2,4,3,1,9,5],
+    [4,2,9,5,1,6,3,8,7],
+    [1,3,5,8,9,7,6,2,4],
+    [3,4,1,9,6,2,5,7,8],
+    [5,7,2,4,3,8,9,6,1],
+    [8,9,6,7,5,1,4,3,2],
+    [9,1,8,6,7,4,2,5,3],
+    [2,6,4,3,8,5,7,1,9],
+    [7,5,3,1,2,9,8,4,6]
+]
+
 interface IProps {
     cell: Props["cell"]
     setCell: React.Dispatch<React.SetStateAction<Props["cell"]>>
@@ -23,14 +38,6 @@ interface IProps {
 
 
 const SudokuCell: React.FC<IProps> = ({ cell, setCell }) => {
-
-    const [input, setInput] = useState({
-        isPreFilled: false,
-        isSelected: false,
-        isRelated: false,
-        value: ""
-    })
-
 
     function highlightCell(numindex: number) {
         cell.map((cell) => {
@@ -41,29 +48,31 @@ const SudokuCell: React.FC<IProps> = ({ cell, setCell }) => {
         )
     }
 
+    function errorCheck(){
+        cell.map((cell) => {
+            
+        })
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, numindex: number): void => {
 
-        const updatedCells: React.SetStateAction<{ value?: number | undefined; isPreFilled: boolean; isSelected: boolean; isRelated: boolean; isBoldTop: boolean; isBoldBottom: boolean; isBoldLeft: boolean; isBoldRight: boolean; row: number; column: number; index: number; }[]> = [];
+        const updatedCells: React.SetStateAction<{ value?: number | undefined; isPreFilled: boolean; isSelected: boolean; isRelated: boolean; isBoldTop: boolean; isBoldBottom: boolean; isBoldLeft: boolean; isBoldRight: boolean; row: number; column: number; index: number; error: boolean; }[]> = [];
 
-        if (e.target.value.length > parseInt(e.target.max,10)) {
-            e.target.value = e.target.value.slice(0, parseInt(e.target.max,10))
-        }
-        if (parseInt(e.target.value) <= 0) {
-            e.target.value = ""
-        }
+        const 
+
 
         cell.map((cell) => {
             if (cell.index == numindex) {
                 const newCell = cell;
 
-                if (e.target.value.length > parseInt(e.target.max,10)) {
-                    newCell.value = parseInt(e.target.value.slice(0, parseInt(e.target.max,10)))
-                }
-                if (parseInt(e.target.value) <= 0) {
-                    newCell.value = cell.value
-                }
+                if ( valid_inputs.includes(parseInt(e.target.value))){
+                    newCell.value = parseInt(e.target.value)
+                }else{
 
-                newCell.value = parseInt(e.target.value)
+                    newCell.value = 0
+                    e.target.value = ""
+                }
+                // newCell.value = parseInt(e.target.value)
                 updatedCells.push(newCell)
             }else{
                 updatedCells.push(cell)
@@ -72,6 +81,7 @@ const SudokuCell: React.FC<IProps> = ({ cell, setCell }) => {
         })
 
         setCell(updatedCells)
+        errorCheck(updatedCells)
     }
 
 
@@ -85,9 +95,6 @@ const SudokuCell: React.FC<IProps> = ({ cell, setCell }) => {
     }
 
     return (
-        // <div>
-        //     {
-        //         row.map((rowIndex) =>
         <div className="row" data-row-index={0}>
             {
                 cell.map((cell) =>
@@ -108,16 +115,17 @@ const SudokuCell: React.FC<IProps> = ({ cell, setCell }) => {
                         <input
                             className="cell-input"
                             type="number"
+                            max="1"
                             data-id={cell.index}
+                            data-error = {cell.error}
                             onInput={maxLengthCheck}
                             onChange={(e) => handleChange(e, cell.index)}
+                            onKeyDown = {blockInvalid}
                             defaultValue={cell.value}></input>
                     </div>)
             }
         </div>
-        //         )
-        //     }
-        // </div>
+
     )
 }
 

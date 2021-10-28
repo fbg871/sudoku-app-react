@@ -1,5 +1,6 @@
 import { setUncaughtExceptionCaptureCallback } from 'process';
 import React, { useState } from 'react';
+import { IState as Props } from "./SudokuGrid";
 
 const row = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -16,24 +17,20 @@ const sudoku_test = [
 ]
 
 interface IProps {
-
-    cell: {
-        value?: number
-        isPreFilled: boolean
-        isSelected: boolean
-        isRelated: boolean
-        isBoldTop: boolean
-        isBoldBottom: boolean
-        isBoldLeft: boolean
-        isBoldRight: boolean
-        row: number
-        column: number
-        index: number
-    }[]
+    cell: Props["cell"]
+    setCell: React.Dispatch<React.SetStateAction<Props["cell"]>>
 }
 
 
-const SudokuCell: React.FC<IProps> = ({ cell }) => {
+const SudokuCell: React.FC<IProps> = ({ cell, setCell }) => {
+
+    const [input, setInput] = useState({
+        isPreFilled: false,
+        isSelected: false,
+        isRelated: false,
+        value: ""
+    })
+
 
     function highlightCell(numindex: number) {
         cell.map((cell) => {
@@ -44,11 +41,39 @@ const SudokuCell: React.FC<IProps> = ({ cell }) => {
         )
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInput({
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, numindex: number): void => {
+
+        const updatedCells: React.SetStateAction<{ value?: number | undefined; isPreFilled: boolean; isSelected: boolean; isRelated: boolean; isBoldTop: boolean; isBoldBottom: boolean; isBoldLeft: boolean; isBoldRight: boolean; row: number; column: number; index: number; }[]> = [];
+
+        if (e.target.value.length > parseInt(e.target.max,10)) {
+            e.target.value = e.target.value.slice(0, parseInt(e.target.max,10))
+        }
+        if (parseInt(e.target.value) <= 0) {
+            e.target.value = ""
+        }
+
+        cell.map((cell) => {
+            if (cell.index == numindex) {
+                const newCell = cell;
+
+                if (e.target.value.length > parseInt(e.target.max,10)) {
+                    newCell.value = parseInt(e.target.value.slice(0, parseInt(e.target.max,10)))
+                }
+                if (parseInt(e.target.value) <= 0) {
+                    newCell.value = cell.value
+                }
+
+                newCell.value = parseInt(e.target.value)
+                updatedCells.push(newCell)
+            }else{
+                updatedCells.push(cell)
+            }
 
         })
+
+        setCell(updatedCells)
     }
+
 
     const maxLengthCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > parseInt(e.target.max,10)) {
@@ -58,6 +83,7 @@ const SudokuCell: React.FC<IProps> = ({ cell }) => {
             e.target.value = ""
         }
     }
+
     return (
         // <div>
         //     {
@@ -78,18 +104,16 @@ const SudokuCell: React.FC<IProps> = ({ cell }) => {
                         data-isboldleft={cell.isBoldLeft}
                         data-isboldright={cell.isBoldRight}
                         onClick={() => highlightCell(cell.index)}
-                        onChange{() => handleChange(cell.index)}
                     >
                         <input
                             className="cell-input"
                             type="number"
-                            max="1"
+                            data-id={cell.index}
                             onInput={maxLengthCheck}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e, cell.index)}
                             defaultValue={cell.value}></input>
                     </div>)
             }
-            {cell.map((cell) => console.log("hello"))}
         </div>
         //         )
         //     }

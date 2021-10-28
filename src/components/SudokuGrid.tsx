@@ -17,7 +17,7 @@ const sudoku_test = [
 
 
 
-interface IState {
+export interface IState {
     cell: {
         value?: number
         isPreFilled: boolean
@@ -44,13 +44,11 @@ function SudokuGrid() {
     const [cell, setCell] = useState(CreateArray())
 
 
-    console.log(list)
-
     return (
         <div className="SudokuGrid">
 
             {
-                <SudokuCell cell={cell} />
+                <SudokuCell cell={cell} setCell = {setCell} />
             }
         </div>
     );

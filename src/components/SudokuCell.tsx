@@ -5,7 +5,7 @@ import blockInvalid from "./blockInvalid"
 
 const row = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
-const valid_inputs = [1,2,3,4,5,6,7,8,9];
+const valid_inputs = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const sudoku_test = [
     [6, 0, 0, 0, 4, 3, 0, 0, 0],
@@ -20,15 +20,15 @@ const sudoku_test = [
 ]
 
 const solved_test = [
-    [6,8,7,2,4,3,1,9,5],
-    [4,2,9,5,1,6,3,8,7],
-    [1,3,5,8,9,7,6,2,4],
-    [3,4,1,9,6,2,5,7,8],
-    [5,7,2,4,3,8,9,6,1],
-    [8,9,6,7,5,1,4,3,2],
-    [9,1,8,6,7,4,2,5,3],
-    [2,6,4,3,8,5,7,1,9],
-    [7,5,3,1,2,9,8,4,6]
+    [6, 8, 7, 2, 4, 3, 1, 9, 5],
+    [4, 2, 9, 5, 1, 6, 3, 8, 7],
+    [1, 3, 5, 8, 9, 7, 6, 2, 4],
+    [3, 4, 1, 9, 6, 2, 5, 7, 8],
+    [5, 7, 2, 4, 3, 8, 9, 6, 1],
+    [8, 9, 6, 7, 5, 1, 4, 3, 2],
+    [9, 1, 8, 6, 7, 4, 2, 5, 3],
+    [2, 6, 4, 3, 8, 5, 7, 1, 9],
+    [7, 5, 3, 1, 2, 9, 8, 4, 6]
 ]
 
 interface IProps {
@@ -39,6 +39,14 @@ interface IProps {
 
 const SudokuCell: React.FC<IProps> = ({ cell, setCell }) => {
 
+    var recentValue = -1
+
+    var recentIndex = -1
+
+    var recentRow = -1
+
+    var recentColumn = -1
+
     function highlightCell(numindex: number) {
         cell.map((cell) => {
             if (cell.index == numindex) {
@@ -48,46 +56,71 @@ const SudokuCell: React.FC<IProps> = ({ cell, setCell }) => {
         )
     }
 
-    function errorCheck(){
-        cell.map((cell) => {
-            
-        })
+    function errorCheck(updatedCells: { value?: number | undefined; isPreFilled: boolean; isSelected: boolean; isRelated: boolean; isBoldTop: boolean; isBoldBottom: boolean; isBoldLeft: boolean; isBoldRight: boolean; row: number; column: number; index: number; error: boolean; }[], numindex: number) {
+
+        var err = false
+
+        if (recentValue == -1) {
+            return
+        } else {
+            cell.map((cell) => {
+                if ((cell.column == recentColumn || cell.row == recentRow) && cell.index != numindex) {
+                    if (recentValue == cell.value){
+                        err = true;
+                    }
+                }
+            })
+        }
+
+        if(err){
+            cell.map((cell) => {
+                if(cell.index == numindex){
+                    cell.error = true
+                    console.log(cell)
+                    console.log("YAY")
+                }
+            })
+        }
+        setCell(cell)
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, numindex: number): void => {
 
         const updatedCells: React.SetStateAction<{ value?: number | undefined; isPreFilled: boolean; isSelected: boolean; isRelated: boolean; isBoldTop: boolean; isBoldBottom: boolean; isBoldLeft: boolean; isBoldRight: boolean; row: number; column: number; index: number; error: boolean; }[]> = [];
 
-        const 
 
+            cell.map((cell) => {
+                if (cell.index == numindex) {
+                    const newCell = cell;
 
-        cell.map((cell) => {
-            if (cell.index == numindex) {
-                const newCell = cell;
+                    if (valid_inputs.includes(parseInt(e.target.value))) {
+                        newCell.value = parseInt(e.target.value)
+                        recentValue = newCell.value
+                        recentIndex = newCell.index
+                        recentRow = newCell.row
+                        recentColumn = newCell.column
 
-                if ( valid_inputs.includes(parseInt(e.target.value))){
-                    newCell.value = parseInt(e.target.value)
-                }else{
+                    } else {
 
-                    newCell.value = 0
-                    e.target.value = ""
+                        newCell.value = 0
+                        e.target.value = ""
+                    }
+                    // newCell.value = parseInt(e.target.value)
+                    updatedCells.push(newCell)
+                } else {
+                    updatedCells.push(cell)
                 }
-                // newCell.value = parseInt(e.target.value)
-                updatedCells.push(newCell)
-            }else{
-                updatedCells.push(cell)
-            }
 
-        })
+            })
 
         setCell(updatedCells)
-        errorCheck(updatedCells)
+        errorCheck(updatedCells, numindex)
     }
 
 
     const maxLengthCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value.length > parseInt(e.target.max,10)) {
-            e.target.value = e.target.value.slice(0, parseInt(e.target.max,10))
+        if (e.target.value.length > parseInt(e.target.max, 10)) {
+            e.target.value = e.target.value.slice(0, parseInt(e.target.max, 10))
         }
         if (parseInt(e.target.value) <= 0) {
             e.target.value = ""
@@ -117,10 +150,10 @@ const SudokuCell: React.FC<IProps> = ({ cell, setCell }) => {
                             type="number"
                             max="1"
                             data-id={cell.index}
-                            data-error = {cell.error}
+                            data-error={cell.error}
                             onInput={maxLengthCheck}
                             onChange={(e) => handleChange(e, cell.index)}
-                            onKeyDown = {blockInvalid}
+                            onKeyDown={blockInvalid}
                             defaultValue={cell.value}></input>
                     </div>)
             }

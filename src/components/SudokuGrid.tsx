@@ -51,10 +51,8 @@ function SudokuGrid() {
 
     const [cell, setCell] = useState(CreateArray())
 
-
     return (
         <div className="SudokuGrid">
-
             {
                 <SudokuCell cell={cell} setCell={setCell} />
             }
@@ -88,8 +86,6 @@ function CreateArray() {
 
             var temp = sudoku_test[i][j]
             var isPreFilledk = false;
-
-
 
             if (temp == 0) {
                 cellarr.push({

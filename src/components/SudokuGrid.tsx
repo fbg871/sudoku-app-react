@@ -63,7 +63,20 @@ function SudokuGrid() {
 function CreateArray() {
 
     // const cellarr = useState<IState["cell"]>([])
-    var cellarr = []
+    var cellarr:{
+        value?: number;
+        isPreFilled: boolean;
+        isSelected: boolean;
+        isRelated: boolean;
+        isBoldTop: boolean;
+        isBoldBottom: boolean;
+        isBoldLeft: boolean;
+        isBoldRight: boolean;
+        row: number;
+        column: number;
+        index: number;
+        error: boolean;
+    }[] = []
 
     for (let i = 0; i < 9; i++) {
         var arr = sudoku_test[i]

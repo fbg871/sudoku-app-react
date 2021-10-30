@@ -2,6 +2,7 @@ import { setUncaughtExceptionCaptureCallback } from 'process';
 import React, { useState } from 'react';
 import SudokuGrid, { IState as Props } from "./SudokuGrid";
 import blockInvalid from "./blockInvalid"
+import { setConstantValue } from 'typescript';
 
 const row = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -37,7 +38,36 @@ const solved_test = [
 // }
 
 
-const SudokuCell = ({ cell, setCell } : {cell:any, setCell:any}) => {
+const SudokuCell = ({ cell, setCell } : {
+    cell:{
+    value?: number;
+    isPreFilled: boolean;
+    isSelected: boolean;
+    isRelated: boolean;
+    isBoldTop: boolean;
+    isBoldBottom: boolean;
+    isBoldLeft: boolean;
+    isBoldRight: boolean;
+    row: number;
+    column: number;
+    index: number;
+    error: boolean;}[] 
+    
+    setCell: React.Dispatch<React.SetStateAction<{
+        value?: number | undefined;
+        isPreFilled: boolean;
+        isSelected: boolean;
+        isRelated: boolean;
+        isBoldTop: boolean;
+        isBoldBottom: boolean;
+        isBoldLeft: boolean;
+        isBoldRight: boolean;
+        row: number;
+        column: number;
+        index: number;
+        error: boolean;
+    }[]>>
+    }) => {
 
     var recentValue = -1
 
@@ -61,27 +91,38 @@ const SudokuCell = ({ cell, setCell } : {cell:any, setCell:any}) => {
         var err = false
 
         if (recentValue == -1) {
-            return
+            console.log("okay")
         } else {
             cell.map((cell:any) => {
                 if ((cell.column == recentColumn || cell.row == recentRow) && cell.index != numindex) {
-                    if (recentValue == cell.value){
+                    if (recentValue == cell.value && recentValue!=0){
                         err = true;
                     }
                 }
             })
         }
 
-        if(err){
-            cell.map((cell:any) => {
-                if(cell.index == numindex){
-                    cell.error = true
-                    console.log(cell)
-                    console.log("YAY")
+
+        cell.map((cell:any) => {
+            if(cell.index == numindex){
+                if(err){ 
+                    cell.error = true;
+                }else{
+                    cell.error=false;
                 }
-            })
-        }
-        setCell(cell)
+                console.log(cell)
+                console.log("YAY")
+            }
+        })
+
+        setCell([...cell])
+        recentColumn = -1
+        recentIndex = -1
+        recentRow = -1
+        recentValue = -1
+
+
+
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, numindex: number): void => {
@@ -107,14 +148,20 @@ const SudokuCell = ({ cell, setCell } : {cell:any, setCell:any}) => {
                 }
                 // newCell.value = parseInt(e.target.value)
                 updatedCells.push(newCell)
+                if(cell.value == ""){
+                    cell.error = false
+                    console.log(cell)
+                }
             } else {
                 updatedCells.push(cell)
             }
 
+
         })
 
-        setCell(updatedCells)
+        // setCell(updatedCells)
         errorCheck(numindex)
+
     }
 
 

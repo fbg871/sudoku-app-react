@@ -41,6 +41,7 @@ export interface IState {
         column: number
         index: number
         error: boolean
+        block: number
     }[]
 }
 
@@ -63,7 +64,7 @@ function SudokuGrid() {
 function CreateArray() {
 
     // const cellarr = useState<IState["cell"]>([])
-    var cellarr:{
+    var cellarr: {
         value?: number;
         isPreFilled: boolean;
         isSelected: boolean;
@@ -76,6 +77,7 @@ function CreateArray() {
         column: number;
         index: number;
         error: boolean;
+        block: number;
     }[] = []
 
     for (let i = 0; i < 9; i++) {
@@ -86,6 +88,34 @@ function CreateArray() {
             var isBoldBottomk = false;
             var isBoldLeftk = false;
             var isBoldRightk = false;
+
+            var block = undefined;
+
+            if (i < 3) {
+                if (j < 3) {
+                    block = 1;
+                } else if (j < 6) {
+                    block = 2
+                } else {
+                    block = 3
+                }
+            } else if (i < 6) {
+                if (j < 3) {
+                    block = 4;
+                } else if (j < 6) {
+                    block = 5
+                } else {
+                    block = 6
+                }
+            } else {
+                if (j < 3) {
+                    block = 7;
+                } else if (j < 6) {
+                    block = 8
+                } else {
+                    block = 9
+                }
+            }
 
             if (i == 0 || i == 3 || i == 6) {
                 isBoldTopk = true;
@@ -113,7 +143,8 @@ function CreateArray() {
                     row: i,
                     column: j,
                     index: i * 9 + j,
-                    error: false
+                    error: false,
+                    block: block
                 })
             } else {
                 isPreFilledk = true;
@@ -129,7 +160,8 @@ function CreateArray() {
                     row: i,
                     column: j,
                     index: i * 9 + j,
-                    error: false
+                    error: false,
+                    block: block
                 })
             }
         }

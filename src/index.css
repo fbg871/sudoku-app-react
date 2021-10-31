@@ -77,13 +77,21 @@ input{
 }
 
 [data-isprefilled=true] {
-  background-color: #bfbfbf;
+  background-color: #b8b8b8;
 }
 
-div input:focus {
+/* div input:focus {
   background-color: #ffe6a1;
-}
+} */
 
 [data-error=true] {
   background-color: #eb7f7f !important;
+}
+
+[data-isselected=true] {
+  background-color:bisque;
+}
+
+[data-isrelated=true] {
+  background-color: lightskyblue;
 }

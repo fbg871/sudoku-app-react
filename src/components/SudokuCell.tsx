@@ -4,9 +4,13 @@ import SudokuGrid, { IState as Props } from "./SudokuGrid";
 import blockInvalid from "./blockInvalid"
 import { setConstantValue } from 'typescript';
 
+import {generateSolved} from "./SudokuGenerate";
+
 const row = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
 const valid_inputs = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+
 
 const sudoku_test = [
     [6, 0, 0, 0, 4, 3, 0, 0, 0],
@@ -38,21 +42,23 @@ const solved_test = [
 // }
 
 
-const SudokuCell = ({ cell, setCell } : {
-    cell:{
-    value?: number;
-    isPreFilled: boolean;
-    isSelected: boolean;
-    isRelated: boolean;
-    isBoldTop: boolean;
-    isBoldBottom: boolean;
-    isBoldLeft: boolean;
-    isBoldRight: boolean;
-    row: number;
-    column: number;
-    index: number;
-    error: boolean;}[] 
-    
+const SudokuCell = ({ cell, setCell }: {
+    cell: {
+        value?: number;
+        isPreFilled: boolean;
+        isSelected: boolean;
+        isRelated: boolean;
+        isBoldTop: boolean;
+        isBoldBottom: boolean;
+        isBoldLeft: boolean;
+        isBoldRight: boolean;
+        row: number;
+        column: number;
+        index: number;
+        error: boolean;
+        block:number;
+    }[]
+
     setCell: React.Dispatch<React.SetStateAction<{
         value?: number | undefined;
         isPreFilled: boolean;
@@ -66,8 +72,9 @@ const SudokuCell = ({ cell, setCell } : {
         column: number;
         index: number;
         error: boolean;
+        block: number;
     }[]>>
-    }) => {
+}) => {
 
     var recentValue = -1
 
@@ -77,25 +84,64 @@ const SudokuCell = ({ cell, setCell } : {
 
     var recentColumn = -1
 
-    function highlightCell(numindex: number) {
-        cell.map((cell:any) => {
+    function highlightCell(numindex: number, value: number, row: number, column: number) {
+
+        var relatedRows: number[] = [];
+
+        var relatedColumns: number[] = [];
+
+        cell.map((cell: any) => {
             if (cell.index == numindex) {
                 cell.isSelected = true;
+                cell.isRelated = true;
+                if (cell.value != undefined) {
+                    relatedRows.push(cell.row)
+                    relatedColumns.push(cell.column)
+                }
+            } else {
+                if (value == undefined) {
+                    cell.isSelected = false;
+                    cell.isRelated = false;
+                } else if (cell.value == value) {
+                    cell.isRelated = true;
+                    relatedRows.push(cell.row)
+                    relatedColumns.push(cell.column)
+                    cell.isSelected = false;
+                } else {
+                    cell.isSelected = false;
+                    cell.isRelated = false;
+                }
             }
-        }
-        )
+        })
+
+
+        setCell([...cell])
+        highlightRowsandColumns(relatedRows, relatedColumns)
     }
 
-    function errorCheck( numindex: number) {
+    function highlightRowsandColumns(relatedRows: number[], relatedColumns: number[]) {
+
+        cell.map((cell) => {
+            if (relatedRows.includes(cell.row) || relatedColumns.includes(cell.column)) {
+                cell.isRelated = true;
+            } else {
+                cell.isRelated = false;
+            }
+        })
+    }
+
+
+
+    function errorCheck(numindex: number) {
 
         var err = false
 
         if (recentValue == -1) {
             console.log("okay")
         } else {
-            cell.map((cell:any) => {
+            cell.map((cell: any) => {
                 if ((cell.column == recentColumn || cell.row == recentRow) && cell.index != numindex) {
-                    if (recentValue == cell.value && recentValue!=0){
+                    if (recentValue == cell.value && recentValue != 0) {
                         err = true;
                     }
                 }
@@ -103,12 +149,12 @@ const SudokuCell = ({ cell, setCell } : {
         }
 
 
-        cell.map((cell:any) => {
-            if(cell.index == numindex){
-                if(err){ 
+        cell.map((cell: any) => {
+            if (cell.index == numindex) {
+                if (err) {
                     cell.error = true;
-                }else{
-                    cell.error=false;
+                } else {
+                    cell.error = false;
                 }
                 console.log(cell)
                 console.log("YAY")
@@ -120,17 +166,14 @@ const SudokuCell = ({ cell, setCell } : {
         recentIndex = -1
         recentRow = -1
         recentValue = -1
-
-
-
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, numindex: number): void => {
 
-        const updatedCells: React.SetStateAction<{ value?: number | undefined; isPreFilled: boolean; isSelected: boolean; isRelated: boolean; isBoldTop: boolean; isBoldBottom: boolean; isBoldLeft: boolean; isBoldRight: boolean; row: number; column: number; index: number; error: boolean; }[]> = [];
+        const updatedCells: React.SetStateAction<{ value?: number | undefined; isPreFilled: boolean; isSelected: boolean; isRelated: boolean; isBoldTop: boolean; isBoldBottom: boolean; isBoldLeft: boolean; isBoldRight: boolean; row: number; column: number; index: number; error: boolean; block: number }[]> = [];
 
 
-        cell.map((cell:any) => {
+        cell.map((cell: any) => {
             if (cell.index == numindex) {
                 const newCell = cell;
 
@@ -148,7 +191,7 @@ const SudokuCell = ({ cell, setCell } : {
                 }
                 // newCell.value = parseInt(e.target.value)
                 updatedCells.push(newCell)
-                if(cell.value == ""){
+                if (cell.value == "") {
                     cell.error = false
                     console.log(cell)
                 }
@@ -161,8 +204,13 @@ const SudokuCell = ({ cell, setCell } : {
 
         // setCell(updatedCells)
         errorCheck(numindex)
-
+        generateSolved();
     }
+
+    // const checkKey = (e: { key: string; preventDefault: () => any; }) => {
+    //     blockInvalid;
+    //     if(e.key)
+    // }
 
 
     const maxLengthCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,7 +225,7 @@ const SudokuCell = ({ cell, setCell } : {
     return (
         <div className="row" data-row-index={0}>
             {
-                cell.map((cell:any) =>
+                cell.map((cell: any) =>
                     <div className="sudoku-cell"
                         key={cell.index}
                         data-isPreFilled={cell.isPreFilled}
@@ -191,14 +239,15 @@ const SudokuCell = ({ cell, setCell } : {
                         data-isboldbottom={cell.isBoldBottom}
                         data-isboldleft={cell.isBoldLeft}
                         data-isboldright={cell.isBoldRight}
-                        onClick={() => highlightCell(cell.index)}
                     >
                         <input
                             className="cell-input"
                             type="number"
                             max="1"
                             data-id={cell.index}
+                            data-isselected={cell.isSelected}
                             data-error={cell.error}
+                            onClick={() => highlightCell(cell.index, cell.value, cell.row, cell.column)}
                             onInput={maxLengthCheck}
                             onChange={(e) => handleChange(e, cell.index)}
                             onKeyDown={blockInvalid}

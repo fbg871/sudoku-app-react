@@ -223,7 +223,8 @@ const SudokuCell = ({ cell, setCell }: {
                             height="50"
 
                             onMouseDown={() => highlightCell(cell.index, cell.value, cell.row, cell.column)}
-
+                            // create global array, make onmouseover add indices to array 
+                            // onmouseup locks the array
                         >
                         </rect>
                         <text

@@ -15,7 +15,6 @@ const generateInitial = () => {
 
     }
 
-
     console.log(grid)
 }
 

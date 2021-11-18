@@ -12,23 +12,28 @@ code {
     monospace;
 }
 
-.SudokuGrid {
-  width:100%;
-  padding:5%;
+.App{
+  padding:10%;
+  pointer-events: none;
 }
 
 .row {
-  width: 90vw;
+  position: center;
 }
 
+
+/* Class for rect in grid */
 .sudoku-cell {
   border: 1px solid black;
-
-  width: 9vw;
-  height: 9vw;
-  float:left;
+  fill:transparent;
 }
 
+svg {
+  width: 100%;
+  position: center;
+}
+
+/* Class for text  */
 .cell-input {
   width: 100%;
   height: 100%;
@@ -41,57 +46,57 @@ code {
   /* cursor:none; */
 }
 
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
-
-input{
-  box-sizing:border-box;
-  font-family: "Helvetica";
-  font-weight: bolder;
-}
-
-[data-isboldtop=true] {
-  border-top: 4px solid black;
-  fill:black;
-}
-
-[data-isboldbottom=true] {
-  border-bottom: 4px solid black;
-}
-
-[data-isboldleft=true] {
-  border-left: 4px solid black;
-}
-
-[data-isboldright=true] {
-  border-right: 4px solid black;
-}
-
 [data-isprefilled=true] {
-  background-color: #b8b8b8;
+  fill:rgb(211, 211, 211);
 }
-
-/* div input:focus {
-  background-color: #ffe6a1;
-} */
 
 [data-error=true] {
-  background-color: #eb7f7f !important;
+  fill: #eb7f7f !important;
 }
 
 [data-isselected=true] {
-  background-color:bisque;
+  fill:bisque;
 }
 
-[data-isrelated=true] {
-  background-color: lightskyblue;
+/* [data-isrelated=true] {
+  fill: lightskyblue;
+} */
+
+/* Create bold gridlines */
+[data-row="1"], 
+[data-row = "4"], 
+[data-row="7"], 
+[data-row="10"],
+[data-column="1"],
+[data-column="4"],
+[data-column="7"],
+[data-column="10"]
+{
+  stroke-width: 4;
 }
+
+g { 
+  pointer-events: auto;
+}
+
+/* SVG <rect> element */
+rect {
+  pointer-events: auto;
+}
+
+/* SVG <text> element */
+.sudoku-numbers {
+  outline-width: 0;
+  font-size:34px;
+  text-anchor: middle;
+  alignment-baseline: central;
+  font-weight: bolder;
+  pointer-events:none;
+
+  /* Makes text not highlightable */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+

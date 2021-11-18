@@ -4,13 +4,11 @@ import SudokuGrid, { IState as Props } from "./SudokuGrid";
 import blockInvalid from "./blockInvalid"
 import { setConstantValue } from 'typescript';
 
-import {generateSolved} from "./SudokuGenerate";
-
-const row = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-
-const valid_inputs = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+import { generateSolved } from "./SudokuGenerate";
+import { clearLine } from 'readline';
 
 
+export var currently_selected: any[] = [];
 
 const sudoku_test = [
     [6, 0, 0, 0, 4, 3, 0, 0, 0],
@@ -42,6 +40,7 @@ const solved_test = [
 // }
 
 
+
 const SudokuCell = ({ cell, setCell }: {
     cell: {
         value?: number;
@@ -56,7 +55,7 @@ const SudokuCell = ({ cell, setCell }: {
         column: number;
         index: number;
         error: boolean;
-        block:number;
+        block: number;
     }[]
 
     setCell: React.Dispatch<React.SetStateAction<{
@@ -86,14 +85,19 @@ const SudokuCell = ({ cell, setCell }: {
 
     function highlightCell(numindex: number, value: number, row: number, column: number) {
 
+        console.log(numindex)
+
         var relatedRows: number[] = [];
 
         var relatedColumns: number[] = [];
 
+        currently_selected = [];
+
         cell.map((cell: any) => {
-            if (cell.index == numindex) {
+            if ((cell.index == numindex) && (cell.isPreFilled == false)) {
                 cell.isSelected = true;
                 cell.isRelated = true;
+                currently_selected.push(cell.index)
                 if (cell.value != undefined) {
                     relatedRows.push(cell.row)
                     relatedColumns.push(cell.column)
@@ -114,9 +118,9 @@ const SudokuCell = ({ cell, setCell }: {
             }
         })
 
-
         setCell([...cell])
         highlightRowsandColumns(relatedRows, relatedColumns)
+        console.log(currently_selected)
     }
 
     function highlightRowsandColumns(relatedRows: number[], relatedColumns: number[]) {
@@ -128,10 +132,36 @@ const SudokuCell = ({ cell, setCell }: {
                 cell.isRelated = false;
             }
         })
+        console.log(relatedColumns)
+        setCell([...cell])
     }
 
+    function InputValue(e: React.KeyboardEvent<SVGGElement>) {
+        if (currently_selected.length != 0) {
+            console.log("index: " + currently_selected[0])
+            console.log("key value: " + e.key)
+            console.log("key code: " + e.code)
+        }
 
+        cell.map((cell) => {
+            if (cell.index == currently_selected[0] && cell.isPreFilled == false) {
+                if ([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(parseInt(e.key))) {
+                    cell.value = parseInt(e.key)
+                    recentColumn = cell.column
+                    recentIndex = cell.index
+                    recentRow = cell.row
+                    recentValue = cell.value
+                    errorCheck(cell.index)
+                } else if (e.key == "Backspace" || e.key == "Delete") {
+                    cell.value = undefined;
+                    cell.error = false;
+                }
+            }
+        })
+        setCell([...cell])
+    }
 
+    // Check if input value is conflicting
     function errorCheck(numindex: number) {
 
         var err = false
@@ -147,7 +177,6 @@ const SudokuCell = ({ cell, setCell }: {
                 }
             })
         }
-
 
         cell.map((cell: any) => {
             if (cell.index == numindex) {
@@ -168,93 +197,49 @@ const SudokuCell = ({ cell, setCell }: {
         recentValue = -1
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, numindex: number): void => {
-
-        const updatedCells: React.SetStateAction<{ value?: number | undefined; isPreFilled: boolean; isSelected: boolean; isRelated: boolean; isBoldTop: boolean; isBoldBottom: boolean; isBoldLeft: boolean; isBoldRight: boolean; row: number; column: number; index: number; error: boolean; block: number }[]> = [];
-
-
-        cell.map((cell: any) => {
-            if (cell.index == numindex) {
-                const newCell = cell;
-
-                if (valid_inputs.includes(parseInt(e.target.value))) {
-                    newCell.value = parseInt(e.target.value)
-                    recentValue = newCell.value
-                    recentIndex = newCell.index
-                    recentRow = newCell.row
-                    recentColumn = newCell.column
-
-                } else {
-
-                    newCell.value = 0
-                    e.target.value = ""
-                }
-                // newCell.value = parseInt(e.target.value)
-                updatedCells.push(newCell)
-                if (cell.value == "") {
-                    cell.error = false
-                    console.log(cell)
-                }
-            } else {
-                updatedCells.push(cell)
-            }
-
-
-        })
-
-        // setCell(updatedCells)
-        errorCheck(numindex)
-        generateSolved();
-    }
-
-    // const checkKey = (e: { key: string; preventDefault: () => any; }) => {
-    //     blockInvalid;
-    //     if(e.key)
-    // }
-
-
-    const maxLengthCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value.length > parseInt(e.target.max, 10)) {
-            e.target.value = e.target.value.slice(0, parseInt(e.target.max, 10))
-        }
-        if (parseInt(e.target.value) <= 0) {
-            e.target.value = ""
-        }
-    }
-
     return (
-        <div className="row" data-row-index={0}>
+        <g className="cells" onKeyDown={(e) => InputValue(e)} tabIndex={0}>
             {
                 cell.map((cell: any) =>
-                    <div className="sudoku-cell"
-                        key={cell.index}
-                        data-isPreFilled={cell.isPreFilled}
-                        data-isSelected={cell.isSelected}
-                        data-isRelated={cell.isRelated}
-                        data-row={cell.row}
-                        data-column={cell.column}
-                        data-error={cell.error}
-                        data-index={cell.index}
-                        data-isboldtop={cell.isBoldTop}
-                        data-isboldbottom={cell.isBoldBottom}
-                        data-isboldleft={cell.isBoldLeft}
-                        data-isboldright={cell.isBoldRight}
-                    >
-                        <input
-                            className="cell-input"
-                            type="number"
-                            max="1"
-                            data-id={cell.index}
+
+                    <g className="cell-group">
+                        <rect className="sudoku-cell"
+                            key={cell.index}
+                            data-isprefilled={cell.isPreFilled}
                             data-isselected={cell.isSelected}
+                            data-isrelated={cell.isRelated}
+                            data-row={cell.row}
+                            data-column={cell.column}
                             data-error={cell.error}
-                            onClick={() => highlightCell(cell.index, cell.value, cell.row, cell.column)}
-                            onInput={maxLengthCheck}
-                            onChange={(e) => handleChange(e, cell.index)}
-                            onKeyDown={blockInvalid}
-                            defaultValue={cell.value}></input>
-                    </div>)
-            }
-        </div>
+                            data-index={cell.index}
+                            data-isboldtop={cell.isBoldTop}
+                            data-isboldbottom={cell.isBoldBottom}
+                            data-isboldleft={cell.isBoldLeft}
+                            data-isboldright={cell.isBoldRight}
+
+                            x={cell.column * 50}
+                            y={cell.row * 50}
+                            width="50"
+                            height="50"
+
+                            onMouseDown={() => highlightCell(cell.index, cell.value, cell.row, cell.column)}
+
+                        >
+                        </rect>
+                        <text
+                            className="sudoku-numbers"
+                            x={(cell.column * 50) + 25}
+                            y={(cell.row * 50) + 25}
+                            width="50"
+                            height="50"
+                        >
+                            {cell.value}
+                        </text>
+
+                    </g>
+
+                )}
+        </g>
 
     )
 }

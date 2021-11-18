@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import SudokuCell from './SudokuCell';
+import SudokuCell, {currently_selected} from './SudokuCell';
+
 
 const sudoku_rows = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+const gridlines = [0,1,2,3,4,5,6,7,8,9];
 
 const sudoku_test = [
     [6, 0, 0, 0, 4, 3, 0, 0, 0],
@@ -45,21 +48,21 @@ export interface IState {
     }[]
 }
 
-
-
 function SudokuGrid() {
     // const [cell, setCell] = useState<IState["cell"]>([])
-
     const [cell, setCell] = useState(CreateArray())
-
     return (
-        <div className="SudokuGrid">
-            {
-                <SudokuCell cell={cell} setCell={setCell} />
-            }
-        </div>
+        <svg className="row" width="500" height="500" viewBox="-50 -50 550 550">
+            <SudokuCell cell={cell} setCell={setCell} />
+            <g className="grid">
+                {gridlines.map((gridlines) => <line fill="none" className="gridline-horizontal" stroke="#000" x1="0" y1={gridlines * 50} x2="450" y2={gridlines * 50} strokeWidth="2" data-row={gridlines + 1} />)}
+                {gridlines.map((gridlines) => <line fill="none" className="gridline-vertical" stroke="#000" x1={gridlines * 50} y1="0" x2={gridlines * 50} y2="450" strokeWidth="2" data-column={gridlines + 1} />)}
+            </g>
+        </svg>
     );
 }
+
+// onClick={(e) => console.log(e.clientX)
 
 function CreateArray() {
 

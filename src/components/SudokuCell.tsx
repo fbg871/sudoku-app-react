@@ -10,6 +10,8 @@ import { clearLine } from 'readline';
 
 export var currently_selected: any[] = [];
 
+var mouseIsDown = false;
+
 const sudoku_test = [
     [6, 0, 0, 0, 4, 3, 0, 0, 0],
     [0, 2, 9, 0, 0, 0, 0, 0, 0],
@@ -41,7 +43,7 @@ const solved_test = [
 
 
 
-const SudokuCell = ({ cell, setCell }: {
+const SudokuCell = ({ cell, setCell, selected, setSelected }: {
     cell: {
         value?: number;
         isPreFilled: boolean;
@@ -56,6 +58,7 @@ const SudokuCell = ({ cell, setCell }: {
         index: number;
         error: boolean;
         block: number;
+        pencil: number[];
     }[]
 
     setCell: React.Dispatch<React.SetStateAction<{
@@ -72,7 +75,13 @@ const SudokuCell = ({ cell, setCell }: {
         index: number;
         error: boolean;
         block: number;
+        pencil: number[];
     }[]>>
+
+    selected: number[]
+
+    setSelected: React.Dispatch<React.SetStateAction<number[]>>
+
 }) => {
 
     var recentValue = -1
@@ -85,6 +94,7 @@ const SudokuCell = ({ cell, setCell }: {
 
     function highlightCell(numindex: number, value: number, row: number, column: number) {
 
+        selected = []
         console.log(numindex)
 
         var relatedRows: number[] = [];
@@ -118,9 +128,21 @@ const SudokuCell = ({ cell, setCell }: {
             }
         })
 
+        selected = currently_selected
         setCell([...cell])
         highlightRowsandColumns(relatedRows, relatedColumns)
-        console.log(currently_selected)
+        setSelected([...selected])
+        console.log(selected)
+    }
+
+    function highlighter() {
+        cell.map((cell) => {
+            if (selected.includes(cell.index)) {
+                cell.isSelected = true;
+            } else {
+                cell.isSelected = false;
+            }
+        })
     }
 
     function highlightRowsandColumns(relatedRows: number[], relatedColumns: number[]) {
@@ -132,33 +154,55 @@ const SudokuCell = ({ cell, setCell }: {
                 cell.isRelated = false;
             }
         })
-        console.log(relatedColumns)
         setCell([...cell])
     }
 
-    function InputValue(e: React.KeyboardEvent<SVGGElement>) {
-        if (currently_selected.length != 0) {
-            console.log("index: " + currently_selected[0])
-            console.log("key value: " + e.key)
-            console.log("key code: " + e.code)
-        }
 
-        cell.map((cell) => {
-            if (cell.index == currently_selected[0] && cell.isPreFilled == false) {
-                if ([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(parseInt(e.key))) {
-                    cell.value = parseInt(e.key)
-                    recentColumn = cell.column
-                    recentIndex = cell.index
-                    recentRow = cell.row
-                    recentValue = cell.value
-                    errorCheck(cell.index)
-                } else if (e.key == "Backspace" || e.key == "Delete") {
-                    cell.value = undefined;
-                    cell.error = false;
+    function pencilMarks(value: string) {
+        var penc: number[] = []
+
+        if (value == "Backspace" || value == "Delete") {
+            cell.map((cell) => {
+                if (selected.includes(cell.index)) {
+                    cell.pencil = penc
                 }
-            }
-        })
+            })
+        } else if([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(parseInt(value))) {
+            cell.map((cell) => {
+                if (selected.includes(cell.index)) {
+                    penc.push(parseInt(value))
+                    cell.pencil = penc
+                }
+                penc = []
+            })
+        }
+    }
+
+    function InputValue(e: React.KeyboardEvent<SVGGElement>) {
+        if (selected.length > 1) {
+            console.log("pencilmarks")
+            pencilMarks(e.key)
+        } else if (selected.length != 0) {
+            cell.map((cell) => {
+                if (cell.index == selected[0] && cell.isPreFilled == false) {
+                    if ([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(parseInt(e.key))) {
+                        cell.value = parseInt(e.key)
+                        recentColumn = cell.column
+                        recentIndex = cell.index
+                        recentRow = cell.row
+                        recentValue = cell.value
+                        errorCheck(cell.index)
+                    } else if (e.key == "Backspace" || e.key == "Delete") {
+                        cell.value = undefined;
+                        cell.error = false;
+                    }
+                }
+            })
+        }
+        console.log("YOOOOO")
         setCell([...cell])
+        console.log(selected)
+        console.log(cell)
     }
 
     // Check if input value is conflicting
@@ -197,8 +241,39 @@ const SudokuCell = ({ cell, setCell }: {
         recentValue = -1
     }
 
+    function mouseClicked(index: number) {
+        var sel = []
+        sel.push(index)
+        mouseIsDown = true
+        setSelected([...sel])
+        highlighter()
+    }
+
+    function mouseMoved(index: number) {
+        if (mouseIsDown == true) {
+            if (!selected.includes(index)) {
+                selected.push(index)
+            }
+        }
+        setSelected([...selected])
+        highlighter()
+    }
+
+    function mouseReleased(index: number) {
+        if (index != 100 && mouseIsDown) {
+            mouseIsDown = false;
+            if (!selected.includes(index)) {
+                selected.push(index)
+            }
+            setSelected([...selected])
+            highlighter()
+        } else {
+            mouseIsDown = false;
+        }
+    }
+
     return (
-        <g className="cells" onKeyDown={(e) => InputValue(e)} tabIndex={0}>
+        <g className="cells" onKeyDown={(e) => InputValue(e)} tabIndex={0} onMouseLeave={() => mouseReleased(100)}>
             {
                 cell.map((cell: any) =>
 
@@ -222,9 +297,20 @@ const SudokuCell = ({ cell, setCell }: {
                             width="50"
                             height="50"
 
-                            onMouseDown={() => highlightCell(cell.index, cell.value, cell.row, cell.column)}
-                            // create global array, make onmouseover add indices to array 
-                            // onmouseup locks the array
+                            // onMouseDown={() => highlightCell(cell.index, cell.value, cell.row, cell.column)}
+
+                            onMouseDown={() => mouseClicked(cell.index)}
+                            onMouseMove={() => mouseMoved(cell.index)}
+                            onMouseUp={() => mouseReleased(cell.index)}
+
+                        // create global array, make onmouseover add indices to array 
+                        // onmouseup locks the array
+
+
+                        // onMouseDown sets boolean "click held down" to true, 
+                        // onMouseMove checks if it's true, and then adds indices to 
+                        // selected array .
+                        // onMouseUp sets boolean back to false, and saves the selected list
                         >
                         </rect>
                         <text
@@ -235,6 +321,15 @@ const SudokuCell = ({ cell, setCell }: {
                             height="50"
                         >
                             {cell.value}
+                        </text>
+                        <text
+                            className="sudoku-pencilmarks"
+                            x={(cell.column * 50) + 25}
+                            y={(cell.row * 50) + 25}
+                            width="15"
+                            height="15"
+                        >
+                            {cell.pencil[0]}
                         </text>
 
                     </g>

@@ -45,15 +45,18 @@ export interface IState {
         index: number
         error: boolean
         block: number
+        pencil: number[]
     }[]
 }
 
 function SudokuGrid() {
     // const [cell, setCell] = useState<IState["cell"]>([])
+    var lst: number[] = []
     const [cell, setCell] = useState(CreateArray())
+    const [selected, setSelected] = useState(lst)
     return (
         <svg className="row" width="500" height="500" viewBox="-50 -50 550 550">
-            <SudokuCell cell={cell} setCell={setCell} />
+            <SudokuCell cell={cell} setCell={setCell} selected={selected} setSelected={setSelected} />
             <g className="grid">
                 {gridlines.map((gridlines) => <line fill="none" className="gridline-horizontal" stroke="#000" x1="0" y1={gridlines * 50} x2="450" y2={gridlines * 50} strokeWidth="2" data-row={gridlines + 1} />)}
                 {gridlines.map((gridlines) => <line fill="none" className="gridline-vertical" stroke="#000" x1={gridlines * 50} y1="0" x2={gridlines * 50} y2="450" strokeWidth="2" data-column={gridlines + 1} />)}
@@ -81,6 +84,7 @@ function CreateArray() {
         index: number;
         error: boolean;
         block: number;
+        pencil: number[];
     }[] = []
 
     for (let i = 0; i < 9; i++) {
@@ -147,7 +151,8 @@ function CreateArray() {
                     column: j,
                     index: i * 9 + j,
                     error: false,
-                    block: block
+                    block: block,
+                    pencil:[]
                 })
             } else {
                 isPreFilledk = true;
@@ -164,7 +169,8 @@ function CreateArray() {
                     column: j,
                     index: i * 9 + j,
                     error: false,
-                    block: block
+                    block: block,
+                    pencil: []
                 })
             }
         }

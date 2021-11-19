@@ -75,8 +75,8 @@ svg {
   stroke-width: 4;
 }
 
-g { 
-  pointer-events: auto;
+.cell-group{
+  pointer-events:none;
 }
 
 /* SVG <rect> element */
@@ -92,6 +92,18 @@ rect {
   alignment-baseline: central;
   font-weight: bolder;
   pointer-events:none;
+
+  /* Makes text not highlightable */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.sudoku-pencilmarks {
+  font-size:13px;
+  font-weight: bold;
+  outline-width: 0;
 
   /* Makes text not highlightable */
   -webkit-user-select: none; /* Safari */        

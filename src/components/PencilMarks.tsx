@@ -25,17 +25,17 @@ const PencilMarks = ({ column, row, value, index }:
         if (value == 1 || value == 4 || value == 7) {
             xpos = xpos + 7
         } else if (value == 2 || value == 5 || value == 8) {
-            xpos = xpos + 21
+            xpos = xpos + 22
         } else {
-            xpos = xpos + 38
+            xpos = xpos + 37
         }
 
         if (value == 1 || value == 2 || value == 3) {
             ypos = ypos + 15
         } else if (value == 4 || value == 5 || value == 6) {
-            ypos = ypos + 26
+            ypos = ypos + 29
         } else {
-            ypos = ypos + 38
+            ypos = ypos + 43
         }
 
         if(checker == 0){

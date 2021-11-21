@@ -85,6 +85,20 @@ const SudokuCell = ({ cell, setCell, selected, setSelected }: {
 
 }) => {
 
+    const [shift, setShift] = useState(false);
+
+    // function shiftDown(key:string){
+    //     if(key === "Shift"){
+    //         setShift(true);
+    //     }
+    // }
+
+    function shiftUp(key:string){
+        if(key === "Shift"){
+            setShift(true);
+        }
+    }
+
     var recentValue = -1
 
     var recentIndex = -1
@@ -181,7 +195,14 @@ const SudokuCell = ({ cell, setCell, selected, setSelected }: {
     }
 
     function InputValue(e: React.KeyboardEvent<SVGGElement>) {
-        if (selected.length > 1) {
+
+        if(e.key === "Shift"){
+            setShift(true);
+        }else{
+            setShift(false);
+        }
+
+        if (selected.length > 1 || shift) {
             console.log("pencilmarks")
             pencilMarks(e.key)
         } else if (selected.length != 0) {
@@ -201,10 +222,9 @@ const SudokuCell = ({ cell, setCell, selected, setSelected }: {
                 }
             })
         }
-        console.log("YOOOOO")
+        console.log("shift " + shift)
         setCell([...cell])
         console.log(selected)
-        console.log(cell)
     }
 
     // Check if input value is conflicting
@@ -275,7 +295,7 @@ const SudokuCell = ({ cell, setCell, selected, setSelected }: {
     }
 
     return (
-        <g className="cells" onKeyDown={(e) => InputValue(e)} tabIndex={0} onMouseLeave={() => mouseReleased(100)}>
+        <g className="cells" onKeyUp = {(e) => shiftUp(e.key)} onKeyDown={(e) => InputValue(e)} tabIndex={0} onMouseLeave={() => mouseReleased(100)}>
             {
                 cell.map((cell: any) =>
 

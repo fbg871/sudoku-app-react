@@ -6,6 +6,7 @@ import { setConstantValue } from 'typescript';
 
 import { generateSolved } from "./SudokuGenerate";
 import { clearLine } from 'readline';
+import PencilMarks from './PencilMarks';
 
 
 export var currently_selected: any[] = [];
@@ -170,6 +171,7 @@ const SudokuCell = ({ cell, setCell, selected, setSelected }: {
         } else if([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(parseInt(value))) {
             cell.map((cell) => {
                 if (selected.includes(cell.index)) {
+                    penc = cell.pencil
                     penc.push(parseInt(value))
                     cell.pencil = penc
                 }
@@ -322,7 +324,7 @@ const SudokuCell = ({ cell, setCell, selected, setSelected }: {
                         >
                             {cell.value}
                         </text>
-                        <text
+                        {/* <text
                             className="sudoku-pencilmarks"
                             x={(cell.column * 50) + 25}
                             y={(cell.row * 50) + 25}
@@ -330,7 +332,8 @@ const SudokuCell = ({ cell, setCell, selected, setSelected }: {
                             height="15"
                         >
                             {cell.pencil[0]}
-                        </text>
+                        </text> */}
+                        <PencilMarks column={cell.column} row={cell.row} value={cell.pencil} index={cell.index}></PencilMarks>
 
                     </g>
 

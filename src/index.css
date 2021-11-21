@@ -112,3 +112,8 @@ rect {
   user-select: none; /* Standard */
 }
 
+.test {
+  fill:transparent;
+  background-color: transparent;
+}
+

@@ -58,6 +58,10 @@ svg {
   fill:bisque;
 }
 
+[data-isrightclick=true] {
+  fill:#b0fffb;
+}
+
 /* [data-isrelated=true] {
   fill: lightskyblue;
 } */
@@ -117,3 +121,17 @@ rect {
   background-color: transparent;
 }
 
+.oi {
+  background-color:blue;
+  width: 50px;
+  height: 50px;
+}
+
+.mouse-selector {
+  outline-width: 0;
+  font-size:27px;
+  text-anchor: middle;
+  alignment-baseline: central;
+  font-weight: bolder;
+  pointer-events:none;
+}

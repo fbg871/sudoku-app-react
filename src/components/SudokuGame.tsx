@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Grid from './Grid';
 import SudokuCell, {currently_selected} from './SudokuCell';
 
 
@@ -36,65 +37,51 @@ export interface IState {
         isPreFilled: boolean
         isSelected: boolean
         isRelated: boolean
-        isBoldTop: boolean
-        isBoldBottom: boolean
-        isBoldLeft: boolean
-        isBoldRight: boolean
         row: number
         column: number
         index: number
         error: boolean
         block: number
         pencil: number[]
-    }[]
+        isRightClick: boolean
+        temporaryValue?:number
+    }[],
+
+    selected: number[],
+
+    controls: {
+        isShift: boolean
+    }
 }
 
 function SudokuGrid() {
     // const [cell, setCell] = useState<IState["cell"]>([])
     var lst: number[] = []
+    var con:IState["controls"] = {isShift:false}
+    
+
     const [cell, setCell] = useState(CreateArray())
     const [selected, setSelected] = useState(lst)
+    const [controls, setControls] = useState(con)
     return (
         <svg className="row" width="500" height="500" viewBox="-50 -50 550 550">
-            <SudokuCell cell={cell} setCell={setCell} selected={selected} setSelected={setSelected} />
-            <g className="grid">
-                {gridlines.map((gridlines) => <line fill="none" className="gridline-horizontal" stroke="#000" x1="0" y1={gridlines * 50} x2="450" y2={gridlines * 50} strokeWidth="2" data-row={gridlines + 1} />)}
-                {gridlines.map((gridlines) => <line fill="none" className="gridline-vertical" stroke="#000" x1={gridlines * 50} y1="0" x2={gridlines * 50} y2="450" strokeWidth="2" data-column={gridlines + 1} />)}
-            </g>
+            <SudokuCell controls={controls} setControls={setControls} cell={cell} setCell={setCell} selected={selected} setSelected={setSelected} />
+            <Grid></Grid>
         </svg>
     );
 }
 
-// onClick={(e) => console.log(e.clientX)
+const InitialControls = () => {
 
-function CreateArray() {
+}
 
-    // const cellarr = useState<IState["cell"]>([])
-    var cellarr: {
-        value?: number;
-        isPreFilled: boolean;
-        isSelected: boolean;
-        isRelated: boolean;
-        isBoldTop: boolean;
-        isBoldBottom: boolean;
-        isBoldLeft: boolean;
-        isBoldRight: boolean;
-        row: number;
-        column: number;
-        index: number;
-        error: boolean;
-        block: number;
-        pencil: number[];
-    }[] = []
+const CreateArray = () => {
+
+    var cellarr: IState["cell"] = []
 
     for (let i = 0; i < 9; i++) {
         var arr = sudoku_test[i]
         for (let j = 0; j < 9; j++) {
-
-            var isBoldTopk = false;
-            var isBoldBottomk = false;
-            var isBoldLeftk = false;
-            var isBoldRightk = false;
 
             var block = undefined;
 
@@ -123,36 +110,23 @@ function CreateArray() {
                     block = 9
                 }
             }
-
-            if (i == 0 || i == 3 || i == 6) {
-                isBoldTopk = true;
-            } if (i == 8) {
-                isBoldBottomk = true;
-            } if (j == 0 || j == 3 || j == 6) {
-                isBoldLeftk = true;
-            } if (j == 8) {
-                isBoldRightk = true;
-            }
-
             var temp = sudoku_test[i][j]
             var isPreFilledk = false;
-
+            
             if (temp == 0) {
                 cellarr.push({
                     value: undefined,
                     isPreFilled: isPreFilledk,
                     isSelected: false,
                     isRelated: false,
-                    isBoldTop: isBoldTopk,
-                    isBoldBottom: isBoldBottomk,
-                    isBoldLeft: isBoldLeftk,
-                    isBoldRight: isBoldRightk,
                     row: i,
                     column: j,
                     index: i * 9 + j,
                     error: false,
                     block: block,
-                    pencil:[]
+                    pencil:[],
+                    isRightClick:false,
+                    temporaryValue:undefined
                 })
             } else {
                 isPreFilledk = true;
@@ -161,16 +135,14 @@ function CreateArray() {
                     isPreFilled: isPreFilledk,
                     isSelected: false,
                     isRelated: false,
-                    isBoldTop: isBoldTopk,
-                    isBoldBottom: isBoldBottomk,
-                    isBoldLeft: isBoldLeftk,
-                    isBoldRight: isBoldRightk,
                     row: i,
                     column: j,
                     index: i * 9 + j,
                     error: false,
                     block: block,
-                    pencil: []
+                    pencil: [],
+                    isRightClick: false,
+                    temporaryValue:undefined
                 })
             }
         }

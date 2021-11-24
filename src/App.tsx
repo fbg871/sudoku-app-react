@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import SudokuGrid from './components/SudokuGrid';
+import SudokuGrid from './components/SudokuGame';
 import './App.css';
 
 function App() {

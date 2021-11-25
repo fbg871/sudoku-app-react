@@ -55,11 +55,15 @@ svg {
 }
 
 [data-isselected=true] {
-  fill:bisque;
+  fill:#fffbc9;
 }
 
 [data-isrightclick=true] {
   fill:#b0fffb;
+}
+
+[data-isrelated=true] {
+  fill:#fffdde;
 }
 
 /* [data-isrelated=true] {
@@ -134,4 +138,14 @@ rect {
   alignment-baseline: central;
   font-weight: bolder;
   pointer-events:none;
+}
+
+.thermo {
+  fill: lightgray;
+  stroke:lightgray;
+
+}
+
+.thermo-cell {
+  overflow: hidden;
 }

@@ -22,27 +22,35 @@ import { IState as Props } from "./SudokuGame";
 // Create new object, settings, and have isVariant be a boolean value. 
 // Add other settings here too
 
-const Variant = ({isVariant}: {isVariant:boolean}) => {
-    var variant
-    var initial = false
-    if(isVariant){
-        if(initial){
-            variant =
-            [<svg
-            className="sudoku-pencilmarks"
-            width="15"
-            height="15"
-        >
-            {0}
-        </svg>]
-        }
+const Variant = ({index, column, row}: {index:number, column:number, row:number}) => {
+    
+    var elem:JSX.Element[] = []
+
+    if(index===1){
+        elem.push(<circle
+            className="thermo"
+            cx={(column * 50) + 25}
+            cy={(row * 50) + 25}
+            r="18"
+        />,
+        <line
+            className = "thermo"
+            x1={column*50}
+            x2={column*50 + 25}
+            y1="25"
+            y2="25"
+            strokeWidth = "15"
+        />)
     }
 
     return(
-        <g>
-        {}
+        <g
+            className = "butthead"
+        >
+            {elem}
         </g>
     )
+
 }
 
 export default Variant;

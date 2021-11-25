@@ -21,25 +21,6 @@ const MouseSelector = ({temporaryValue, column, row, isRightClick}:
         )}
     </AnimatePresence>
     )
-    // var tex
-
-    // if(isanimating){
-    //     tex=9
-    // }
-
-    // return(
-    //     <motion.text 
-    //         initial={{opacity:0}}
-    //         animate={{opacity:0.8}}
-    //         className = "mouse-selector"
-    //         x={(column * 50) + 25}
-    //         y={(row * 50) + 25}
-    //         width="50"
-    //         height="50"
-    //     >
-    //         {tex}
-    //     </motion.text>
-    // )
 }
 
 export default MouseSelector;

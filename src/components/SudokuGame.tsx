@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Grid from './Grid';
 import SudokuCell, {currently_selected} from './SudokuCell';
+import ThermoSudoku from './ThermoSudoku';
 
 
 const sudoku_rows = [0, 1, 2, 3, 4, 5, 6, 7, 8];
@@ -45,12 +46,24 @@ export interface IState {
         pencil: number[]
         isRightClick: boolean
         temporaryValue?:number
+        thermoSudoku: {
+            isBulb:boolean
+            isTip:boolean 
+            directionOne:number
+            directionTwo:number
+        }
     }[],
 
     selected: number[],
 
     controls: {
         isShift: boolean
+    },
+
+    settings: {
+        isVariant: boolean
+        errorCheckType: boolean
+        highlightRelated:boolean
     }
 }
 
@@ -126,7 +139,13 @@ const CreateArray = () => {
                     block: block,
                     pencil:[],
                     isRightClick:false,
-                    temporaryValue:undefined
+                    temporaryValue:undefined,
+                    thermoSudoku:{
+                        isBulb:false,
+                        isTip:true,
+                        directionOne:1,
+                        directionTwo:2
+                    }
                 })
             } else {
                 isPreFilledk = true;
@@ -142,7 +161,13 @@ const CreateArray = () => {
                     block: block,
                     pencil: [],
                     isRightClick: false,
-                    temporaryValue:undefined
+                    temporaryValue:undefined,
+                    thermoSudoku:{
+                        isBulb:false,
+                        isTip:true,
+                        directionOne:1,
+                        directionTwo:2
+                    }
                 })
             }
         }

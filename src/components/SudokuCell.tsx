@@ -8,6 +8,8 @@ import { clearLine } from 'readline';
 import PencilMarks from './PencilMarks';
 import SudokuNumbers from './SudokuNumbers';
 import MouseSelector from './MouseSelector';
+import Variant from './VariantGrid';
+import ThermoSudoku from './ThermoSudoku';
 
 
 export var currently_selected: any[] = [];
@@ -83,7 +85,7 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
 
     var recentColumn = -1
 
-    function highlighter() {
+    const highlighter = () => {
         cell.map((cell) => {
             if (selected.includes(cell.index) && !cell.isPreFilled) {
                 cell.isSelected = true;
@@ -94,19 +96,20 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
         setCell([...cell])
     }
 
-    function highlightRowsandColumns(relatedRows: number[], relatedColumns: number[]) {
-
-        cell.map((cell) => {
-            if (relatedRows.includes(cell.row) || relatedColumns.includes(cell.column)) {
-                cell.isRelated = true;
-            } else {
-                cell.isRelated = false;
-            }
-        })
+    const highlightRelated = (value:number) => {
+        if(selected.length === 1){
+            cell.map((cell) => {
+                if(cell.value === value){
+                    cell.isRelated = true
+                }else{
+                    cell.isRelated = false
+                }
+            })
+        }
         setCell([...cell])
     }
 
-    function pencilMarks(value: string) {
+    const pencilMarks = (value: string) => {
         var penc: number[] = []
 
         if (value == "Backspace" || value == "Delete") {
@@ -136,7 +139,7 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
         }
     }
 
-    function InputValue(e: React.KeyboardEvent<SVGGElement>) {
+    const InputValue = (e: React.KeyboardEvent<SVGGElement>) => {
 
         if (e.key === "Shift") {
             setShift(true);
@@ -157,10 +160,9 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
                         recentRow = cell.row
                         recentValue = cell.value
                         errorCheck(cell.index)
+                        highlightRelated(parseInt(e.key))
                     } else if (e.key == "Backspace" || e.key == "Delete") {
-                        cell.value = undefined;
-                        cell.temporaryValue = undefined;
-                        cell.error = false;
+                        deleteValues()
                     }
                 }
             })
@@ -172,7 +174,7 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
     }
 
     // Check if input value is conflicting
-    function errorCheck(numindex: number) {
+    const errorCheck = (numindex:number) => {
 
         var err = false
 
@@ -207,30 +209,21 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
         recentValue = -1
     }
 
-    function deleteValues() {
+    const deleteValues= () => {
         cell.map((cell) => {
             if (selected.includes(cell.index) && !cell.isPreFilled) {
                 cell.value = undefined
                 cell.temporaryValue = undefined
+
                 cell.pencil = []
                 cell.error = false
             }
+            cell.isRelated = false
         })
         setCell([...cell])
     }
 
-    function selector(initial: boolean, index: number) {
-        if (initial) {
-            var sel = []
-            sel.push(index)
-            setSelected(sel)
-        } else {
-            selected.push(index)
-            setSelected([...selected])
-        }
-    }
-
-    function mouseClicked(e: React.MouseEvent<SVGRectElement, MouseEvent>, index: number) {
+    const mouseClicked = (e: React.MouseEvent<SVGRectElement, MouseEvent>, index: number) => {
 
         // if
         if (selected.includes(index)) {
@@ -259,7 +252,7 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
         highlighter()
     }
 
-    function mouseMoved(index: number) {
+    const mouseMoved = (index: number) => {
         if (mouseIsDown == true) {
             if (!selected.includes(index)) {
                 selected.push(index)
@@ -269,7 +262,7 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
         highlighter()
     }
 
-    function mouseReleased(index:number, e?: React.MouseEvent<SVGRectElement, MouseEvent>) {
+    const mouseReleased = (index:number, e?: React.MouseEvent<SVGRectElement, MouseEvent>) => {
         if (e !== undefined) {
             if (e.button !== 1) {
                 if (index != 100 && mouseIsDown) {
@@ -298,7 +291,7 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
     }
 
 
-    function incrementTemporary(e: React.WheelEvent<SVGRectElement>) {
+    const incrementTemporary = (e: React.WheelEvent<SVGRectElement>) => {
         if (selected.length === 1) {
             cell.map((cell) => {
                 if (cell.isRightClick === true) {
@@ -362,7 +355,8 @@ const SudokuCell = ({ controls, setControls, cell, setCell, selected, setSelecte
                         <SudokuNumbers column={cell.column} row={cell.row} value={cell.value}></SudokuNumbers>
                         <PencilMarks isprefilled={cell.isPreFilled} column={cell.column} row={cell.row} value={cell.pencil} index={cell.index}></PencilMarks>
                         <MouseSelector temporaryValue={cell.temporaryValue} column={cell.column} row={cell.row} isRightClick={cell.isRightClick}></MouseSelector>
-
+                        {/* <Variant column={cell.column} row={cell.row} index={cell.index}></Variant> */}
+                        <ThermoSudoku isBulb={cell.thermoSudoku.isBulb} isTip={cell.thermoSudoku.isTip} directionOne={cell.thermoSudoku.directionOne} directionTwo={cell.thermoSudoku.directionTwo} column={cell.column} row={cell.row}></ThermoSudoku>
                     </g>
                 )}
 

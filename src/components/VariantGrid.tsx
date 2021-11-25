@@ -1,5 +1,5 @@
 import { setUncaughtExceptionCaptureCallback } from 'process';
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { IState as Props } from "./SudokuGame";
 
 
@@ -22,35 +22,57 @@ import { IState as Props } from "./SudokuGame";
 // Create new object, settings, and have isVariant be a boolean value. 
 // Add other settings here too
 
-const Variant = ({index, column, row}: {index:number, column:number, row:number}) => {
-    
-    var elem:JSX.Element[] = []
+import ThermoSudoku from './ThermoSudoku';
+import ArrowSudoku from './ArrowSudoku';
+import PalindromeSudoku from './PalindromeSudoku';
 
-    if(index===1){
-        elem.push(<circle
-            className="thermo"
-            cx={(column * 50) + 25}
-            cy={(row * 50) + 25}
-            r="18"
-        />,
-        <line
-            className = "thermo"
-            x1={column*50}
-            x2={column*50 + 25}
-            y1="25"
-            y2="25"
-            strokeWidth = "15"
-        />)
+import { IState } from './SudokuGame';
+
+const Variant = ({cell, isThermo, isArrow, isPalindrome}: {cell: any, isThermo:boolean, isArrow:boolean, isPalindrome:boolean}) => {
+    if(isThermo){
+        console.log("thermo: " + isThermo);
+        return(
+            <ThermoSudoku 
+                isBulb={cell.thermoSudoku.isBulb} 
+                isTip={cell.thermoSudoku.isTip} 
+                directionOne={cell.thermoSudoku.directionOne} 
+                directionTwo={cell.thermoSudoku.directionTwo} 
+                column={cell.column} 
+                row={cell.row}/>
+                )
     }
 
-    return(
-        <g
-            className = "butthead"
-        >
-            {elem}
-        </g>
-    )
+    if(isArrow){
+        console.log("arrow: " + isArrow);
+        return(
+            <ArrowSudoku 
+                isArrow={cell.arrowSudoku.isArrow}
+                isCircle={cell.arrowSudoku.isCircle}
+                directionOne={cell.arrowSudoku.directionOne}
+                directionTwo={cell.arrowSudoku.directionTwo}
+            />
+        )
+    }
 
+    if(isPalindrome){
+        console.log("palindrome: " + isPalindrome);
+        return(
+            <PalindromeSudoku 
+                isEnd={cell.palindromeSudoku.isEnd} 
+                directionOne={cell.palindromeSudoku.directionOne} 
+                directionTwo={cell.palindromeSudoku.directionTwo}
+            />
+        )
+    }
+    var elem:JSX.Element = <g className="variant"></g>
+
+
+    return(elem)
 }
 
-export default Variant;
+// Stop unnecessary re-rendering
+function arePropsEqual(prevProps: { cell: any; }, nextProps: { cell: any; }){
+    return prevProps.cell === nextProps.cell;
+}
+
+export default memo(Variant, arePropsEqual);

@@ -52,6 +52,17 @@ export interface IState {
             directionOne:number
             directionTwo:number
         }
+        arrowSudoku: {
+            isCircle:boolean
+            isArrow:boolean
+            directionOne:number
+            directionTwo:number
+        }
+        palindromeSudoku: {
+            isEnd:boolean
+            directionOne:number
+            directionTwo:number
+        }
     }[],
 
     selected: number[],
@@ -61,7 +72,9 @@ export interface IState {
     },
 
     settings: {
-        isVariant: boolean
+        isThermo: boolean
+        isArrow: boolean
+        isPalindrome: boolean
         errorCheckType: boolean
         highlightRelated:boolean
     }
@@ -71,14 +84,24 @@ function SudokuGrid() {
     // const [cell, setCell] = useState<IState["cell"]>([])
     var lst: number[] = []
     var con:IState["controls"] = {isShift:false}
-    
+
+    var set:IState["settings"] = {
+        isThermo:true,
+        isArrow:false,
+        isPalindrome:false,
+        errorCheckType:false,
+        highlightRelated:false    
+    }
+
 
     const [cell, setCell] = useState(CreateArray())
     const [selected, setSelected] = useState(lst)
     const [controls, setControls] = useState(con)
+
+    const [settings, setSettings] = useState(set)
     return (
         <svg className="row" width="500" height="500" viewBox="-50 -50 550 550">
-            <SudokuCell controls={controls} setControls={setControls} cell={cell} setCell={setCell} selected={selected} setSelected={setSelected} />
+            <SudokuCell controls={controls} setControls={setControls} cell={cell} setCell={setCell} selected={selected} setSelected={setSelected} settings={settings}/>
             <Grid></Grid>
         </svg>
     );
@@ -141,10 +164,21 @@ const CreateArray = () => {
                     isRightClick:false,
                     temporaryValue:undefined,
                     thermoSudoku:{
-                        isBulb:false,
-                        isTip:true,
+                        isBulb:true,
+                        isTip:false,
                         directionOne:1,
                         directionTwo:2
+                    },
+                    arrowSudoku: {
+                        isCircle:false,
+                        isArrow:false,
+                        directionOne:1,
+                        directionTwo:2
+                    },
+                    palindromeSudoku: {
+                        isEnd:false,
+                        directionOne:2,
+                        directionTwo:3
                     }
                 })
             } else {
@@ -165,6 +199,17 @@ const CreateArray = () => {
                     thermoSudoku:{
                         isBulb:false,
                         isTip:true,
+                        directionOne:1,
+                        directionTwo:2
+                    },
+                    arrowSudoku: {
+                        isCircle:false,
+                        isArrow:false,
+                        directionOne:1,
+                        directionTwo:2
+                    },
+                    palindromeSudoku: {
+                        isEnd:false,
                         directionOne:1,
                         directionTwo:2
                     }

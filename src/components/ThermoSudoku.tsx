@@ -1,10 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
 
 const ThermoSudoku = ({isBulb, isTip, directionOne, directionTwo, column, row}:{isBulb:boolean, isTip:boolean, directionOne:number, directionTwo:number, column:number, row:number} ) => {
 
     var elem:JSX.Element[] = []
 
     if(column === 1 && row === 0){
+        console.log("oioimm")
         if(isBulb){
             elem.push(
             <circle
@@ -34,5 +35,6 @@ const ThermoSudoku = ({isBulb, isTip, directionOne, directionTwo, column, row}:{
     )
 
 }
+
 
 export default ThermoSudoku;

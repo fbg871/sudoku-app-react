@@ -1,87 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from './Grid';
-import SudokuCell, {currently_selected} from './SudokuCell';
+import SudokuBoard from './SudokuBoard';
 import ThermoSudoku from './ThermoSudoku';
+
+import Cell from '../interfaces/Cell';
+import Settings from '../interfaces/Settings';
+
+import { sudoku_test, solved_test } from '../helpers/sudoku_text';
 
 
 const sudoku_rows = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
 const gridlines = [0,1,2,3,4,5,6,7,8,9];
 
-const sudoku_test = [
-    [6, 0, 0, 0, 4, 3, 0, 0, 0],
-    [0, 2, 9, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 6, 0, 4],
-    [3, 4, 1, 0, 0, 2, 0, 7, 0],
-    [0, 0, 0, 0, 0, 8, 9, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 3, 0],
-    [0, 1, 0, 6, 7, 4, 0, 0, 3],
-    [0, 0, 0, 0, 8, 0, 0, 0, 0],
-    [0, 5, 0, 1, 0, 0, 0, 0, 0]
-]
-
-const solved_test = [
-    [6, 8, 7, 2, 4, 3, 1, 9, 5],
-    [4, 2, 9, 5, 1, 6, 3, 8, 7],
-    [1, 3, 5, 8, 9, 7, 6, 2, 4],
-    [3, 4, 1, 9, 6, 2, 5, 7, 8],
-    [5, 7, 2, 4, 3, 8, 9, 6, 1],
-    [8, 9, 6, 7, 5, 1, 4, 3, 2],
-    [9, 1, 8, 6, 7, 4, 2, 5, 3],
-    [2, 6, 4, 3, 8, 5, 7, 1, 9],
-    [7, 5, 3, 1, 2, 9, 8, 4, 6]
-]
-
 export interface IState {
-    cell: {
-        value?: number
-        isPreFilled: boolean
-        isSelected: boolean
-        isRelated: boolean
-        row: number
-        column: number
-        index: number
-        error: boolean
-        block: number
-        pencil: number[]
-        isRightClick: boolean
-        temporaryValue?:number
-        thermoSudoku: {
-            isBulb:boolean
-            isTip:boolean 
-            directionOne:number
-            directionTwo:number
-        }
-        arrowSudoku: {
-            isCircle:boolean
-            isArrow:boolean
-            directionOne:number
-            directionTwo:number
-        }
-        palindromeSudoku: {
-            isEnd:boolean
-            directionOne:number
-            directionTwo:number
-        }
-    }[],
-
+    cells: Cell[],
     selected: number[],
-
     controls: {
         isShift: boolean
     },
-
-    settings: {
-        isThermo: boolean
-        isArrow: boolean
-        isPalindrome: boolean
-        errorCheckType: boolean
-        highlightRelated:boolean
-    }
+    settings: Settings
 }
 
-function SudokuGrid() {
-    // const [cell, setCell] = useState<IState["cell"]>([])
+const SudokuGrid = () => {
     var lst: number[] = []
     var con:IState["controls"] = {isShift:false}
 
@@ -93,27 +34,25 @@ function SudokuGrid() {
         highlightRelated:false    
     }
 
+    const [cells, setCells] = useState(CreateArray())
 
-    const [cell, setCell] = useState(CreateArray())
+
     const [selected, setSelected] = useState(lst)
     const [controls, setControls] = useState(con)
 
     const [settings, setSettings] = useState(set)
+
     return (
-        <svg className="row" width="500" height="500" viewBox="-50 -50 550 550">
-            <SudokuCell controls={controls} setControls={setControls} cell={cell} setCell={setCell} selected={selected} setSelected={setSelected} settings={settings}/>
-            <Grid></Grid>
+        <svg className="sudoku-game" width="500" height="500" viewBox="-50 -50 550 550">
+            <SudokuBoard controls={controls} setControls={setControls} cells={cells} setCells={setCells} selected={selected} setSelected={setSelected} settings={settings}/>
+            <Grid/>
         </svg>
     );
 }
 
-const InitialControls = () => {
-
-}
-
 const CreateArray = () => {
 
-    var cellarr: IState["cell"] = []
+    var cellarr: IState["cells"] = []
 
     for (let i = 0; i < 9; i++) {
         var arr = sudoku_test[i]
@@ -164,7 +103,7 @@ const CreateArray = () => {
                     isRightClick:false,
                     temporaryValue:undefined,
                     thermoSudoku:{
-                        isBulb:true,
+                        isBulb:false,
                         isTip:false,
                         directionOne:1,
                         directionTwo:2

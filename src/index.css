@@ -13,18 +13,14 @@ code {
 }
 
 .App{
-  padding:10%;
+  padding-right:10%;
+  padding-left: 10%;
   pointer-events: none;
-}
-
-.row {
-  position: center;
 }
 
 
 /* Class for rect in grid */
 .sudoku-cell {
-  border: 1px solid black;
   fill:transparent;
 }
 
@@ -47,7 +43,7 @@ svg {
 }
 
 [data-isprefilled=true] {
-  fill:rgb(211, 211, 211);
+  fill:#DDDDDD;
 }
 
 [data-error=true] {
@@ -55,15 +51,22 @@ svg {
 }
 
 [data-isselected=true] {
-  fill:#fffbc9;
+  fill:#7FDBFF;
+  opacity:70%;
+  stroke: black;
+  stroke-width: 4;
+  stroke-linecap:"butt";
+  overflow:hidden;
 }
 
 [data-isrightclick=true] {
-  fill:#b0fffb;
+  fill:#62d3ff;
+  opacity:70%;
 }
 
 [data-isrelated=true] {
-  fill:#fffdde;
+  fill:#7FDBFF;
+  opacity: 100%;
 }
 
 [data-isrightclick=true] {
@@ -71,8 +74,14 @@ svg {
 }
 
 [data-isprefilled=true][data-isrelated=true] {
-  fill: #dddbbf;
+  fill: #64a7c2;
 }
+
+
+[data-isprefilled=true][data-isselected=true]{
+  fill:#64a7c2;
+}
+
 
 /* Create bold gridlines */
 [data-row="1"], 

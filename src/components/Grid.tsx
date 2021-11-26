@@ -8,6 +8,7 @@ const Grid = ({}) => {
         if(initial){
             gridElements = [
             <line 
+                key={num}
                 fill="none" 
                 className="gridline-horizontal" 
                 stroke="#000" 
@@ -16,8 +17,10 @@ const Grid = ({}) => {
                 x2="450" 
                 y2={num * 50} 
                 strokeWidth="2" 
+                stroke-linecap = "square"
                 data-row={num + 1} />,
                 <line 
+                key={num-1}
                 fill="none" 
                 className="gridline-vertical" 
                 stroke="#000" 
@@ -26,11 +29,13 @@ const Grid = ({}) => {
                 x2={num * 50} 
                 y2="450" 
                 strokeWidth="2" 
+                stroke-linecap = "square"
                 data-column={num + 1} />
             ]
             initial=false
         }else{
             gridElements.push(<line 
+                key={num*3}
                 fill="none" 
                 className="gridline-horizontal" 
                 stroke="#000" 
@@ -39,8 +44,10 @@ const Grid = ({}) => {
                 x2="450" 
                 y2={num * 50} 
                 strokeWidth="2" 
+                stroke-linecap = "square"
                 data-row={num + 1} />,
                 <line 
+                key={num*200}
                 fill="none" 
                 className="gridline-vertical" 
                 stroke="#000" 
@@ -49,6 +56,7 @@ const Grid = ({}) => {
                 x2={num * 50} 
                 y2="450" 
                 strokeWidth="2" 
+                stroke-linecap = "square"
                 data-column={num + 1} />)
         }
     })

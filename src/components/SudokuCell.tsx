@@ -6,13 +6,10 @@ import { IState } from "./SudokuGame";
 
 const SudokuCell = ({rectCell, selected, setSelected, cells, setCells, leftClickDown, setLeftClickDown}:
     {rectCell:Cell,
-
     selected:IState["selected"],
     setSelected:React.Dispatch<React.SetStateAction<IState["selected"]>>,
-
     cells:IState["cells"], 
     setCells:React.Dispatch<React.SetStateAction<IState["cells"]>>,
-
     leftClickDown:boolean,
     setLeftClickDown: React.Dispatch<React.SetStateAction<boolean>>
 }

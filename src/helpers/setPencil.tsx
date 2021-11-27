@@ -35,24 +35,6 @@ const setPencil = (
             penc = []
         })
     }
-
-    console.log("YEEEEE")
-    // if(selected.length === 1){
-    //     cell.map((cell) => {
-    //         if(cell.temporaryValue !== undefined && cell.value === undefined){
-    //             cell.pencil.push(cell.temporaryValue)
-    //         }
-    //         cell.temporaryValue = undefined
-    //     })
-    // }else{
-    //     cell.map((cell) => {
-    //         if(selected.includes(cell.index)){
-    //             if(cell.pencil.includes(parseInt(value)))
-    //         }
-    //     })
-    // }
-
-    
 }
 
 export default setPencil;

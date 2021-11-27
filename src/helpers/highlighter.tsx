@@ -1,11 +1,13 @@
 import { IState } from "../components/SudokuGame";
 
 const highlighter = (
-    cells:IState["cells"],
+    cellsp:IState["cells"],
     setCells: React.Dispatch<React.SetStateAction<IState["cells"]>>,
     selected: IState["selected"]) => {
 
         var num:number | undefined = undefined
+
+        const cells = [...cellsp]
 
         if(selected.length === 1){
             cells.map((cell) => {

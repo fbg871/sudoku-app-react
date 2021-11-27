@@ -1,10 +1,12 @@
 import { IState } from "../components/SudokuGame";
 
 const incrementTemporary = (
-    cells:IState['cells'],
+    cellsp:IState['cells'],
     setCells:React.Dispatch<React.SetStateAction<IState["cells"]>>,
     event:React.WheelEvent<SVGRectElement>
     ) => {
+
+        const cells = cellsp
 
         cells.map((cell) => {
             if(cell.isRightClick){

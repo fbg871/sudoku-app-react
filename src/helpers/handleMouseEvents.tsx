@@ -6,22 +6,17 @@ import setPencil from "./setPencil";
 
 const handleMouseEvents = (
     eventType: string,
-
-    cells: IState["cells"],
+    cellsp: IState["cells"],
     setCells: React.Dispatch<React.SetStateAction<IState["cells"]>>,
-
     leftClickDown: boolean,
     setLeftClickDown: React.Dispatch<React.SetStateAction<boolean>>,
-
     selected: IState["selected"],
     setSelected: React.Dispatch<React.SetStateAction<IState["selected"]>>,
-
     e: React.MouseEvent<SVGRectElement, MouseEvent>,
     index: number
-
-
-
 ) => {
+
+    const cells = cellsp
 
     if (eventType === "click") {
 
@@ -105,7 +100,7 @@ const handleMouseEvents = (
                 })
 
                 if (num != -1 && tmp != -1) {
-                    setValue(num, cells, setCells, tmp)
+                    setValue(num, cells, setCells, selected, tmp)
                 }
                 setCells([...cells])
 
@@ -131,7 +126,7 @@ const handleMouseEvents = (
                     })
 
                     if (num != -1 && tmp != -1) {
-                        setValue(num, cells, setCells, tmp)
+                        setValue(num, cells, setCells, selected, tmp)
                     }
                     setCells([...cells])
 

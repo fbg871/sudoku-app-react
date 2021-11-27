@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Grid from './Grid';
 import SudokuBoard from './SudokuBoard';
-import ThermoSudoku from './ThermoSudoku';
 
 import Cell from '../interfaces/Cell';
 import Settings from '../interfaces/Settings';
 
 import { sudoku_test, solved_test } from '../helpers/sudoku_text';
-
-
-const sudoku_rows = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-
-const gridlines = [0,1,2,3,4,5,6,7,8,9];
 
 export interface IState {
     cells: Cell[],
@@ -22,8 +16,7 @@ export interface IState {
     settings: Settings
 }
 
-const SudokuGrid = () => {
-    var lst: number[] = []
+const SudokuGame = () => {
     var con:IState["controls"] = {isShift:false}
 
     var set:IState["settings"] = {
@@ -36,15 +29,13 @@ const SudokuGrid = () => {
 
     const [cells, setCells] = useState(CreateArray())
 
-
-    const [selected, setSelected] = useState(lst)
     const [controls, setControls] = useState(con)
 
     const [settings, setSettings] = useState(set)
 
     return (
         <svg className="sudoku-game" width="500" height="500" viewBox="-50 -50 550 550">
-            <SudokuBoard controls={controls} setControls={setControls} cells={cells} setCells={setCells} selected={selected} setSelected={setSelected} settings={settings}/>
+            <SudokuBoard controls={controls} setControls={setControls} cells={cells} setCells={setCells} settings={settings}/>
             <Grid/>
         </svg>
     );
@@ -159,4 +150,4 @@ const CreateArray = () => {
     return cellarr
 }
 
-export default SudokuGrid;
+export default SudokuGame;

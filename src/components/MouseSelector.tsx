@@ -2,7 +2,6 @@ import React from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
 import PencilMarks from "./PencilMarks";
-import { clearLine } from "readline";
 
 const MouseSelector = ({ index, selected, temporaryValue, column, row, isRightClick }:
     { index: number, selected: number[], temporaryValue?: number, column: number, row: number, isRightClick: boolean }) => {

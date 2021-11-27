@@ -25,7 +25,7 @@ const handleKeyboardInput = (
     } else if (selected.length === 1 ) {
 
         if([1,2,3,4,5,6,7,8,9].includes(parseInt(event.key))){
-            setValue(selected[0], cells, setCells, parseInt(event.key))
+            setValue(selected[0], cells, setCells, selected, parseInt(event.key))
         } else if(event.key == "Backspace" || event.key == "Delete"){
             deleteValues(cells, setCells, selected)
         }

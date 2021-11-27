@@ -3,20 +3,23 @@ import { IState } from "../components/SudokuGame";
 
 const errorCheck = 
 (
-    cells:IState["cells"], 
+    cellsp:IState["cells"], 
     setCells:React.Dispatch<React.SetStateAction<IState["cells"]>>,
     index:number, 
     recentValue:number, 
     recentColumn:number, 
-    recentRow:number
+    recentRow:number,
+    recentBlock:number
 )   => {
+
+    const cells = cellsp
 
     var err = false
 
         if (recentValue == -1) {
         } else {
             cells.map((cell: any) => {
-                if ((cell.column == recentColumn || cell.row == recentRow) && cell.index != index) {
+                if ((cell.column == recentColumn || cell.row == recentRow || cell.block == recentBlock) && cell.index != index) {
                     if (recentValue == cell.value && recentValue != 0) {
                         err = true;
                     }
@@ -35,7 +38,6 @@ const errorCheck =
         })
 
         setCells([...cells])
-
 }
 
 export default errorCheck;

@@ -2,13 +2,15 @@
 import Cell from "../interfaces/Cell";
 import { IState } from "../components/SudokuGame";
 import errorCheck from "./errorCheck";
+import highlighter from "./highlighter";
 
-const setValue = (index:number, cells:IState['cells'], setCells:React.Dispatch<React.SetStateAction<IState["cells"]>>, value:number) => {
+const setValue = (index:number, cellsp:IState['cells'], setCells:React.Dispatch<React.SetStateAction<IState["cells"]>>, selected:number[], value:number) => {
     
-    console.log("NEW FUNCTIONS WORKING")
+    const cells = cellsp
 
     var col = -1
     var row = -1
+    var block = -1
 
     cells.map((cell)=>{
         if(cell.index === index && !cell.isPreFilled){
@@ -18,13 +20,15 @@ const setValue = (index:number, cells:IState['cells'], setCells:React.Dispatch<R
 
             col = cell.column
             row = cell.row
+            block = cell.block
 
         }
     })
 
     if(row !== -1 && col !== -1){
-        errorCheck(cells, setCells, index, value, col, row)
+        errorCheck(cells, setCells, index, value, col, row, block)
     }
+    highlighter(cellsp, setCells, selected)
 
 }
 

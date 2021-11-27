@@ -1,4 +1,3 @@
-import React from "react";
 
 const Grid = ({}) => {
     var gridElements:JSX.Element[] = []
@@ -17,7 +16,7 @@ const Grid = ({}) => {
                 x2="450" 
                 y2={num * 50} 
                 strokeWidth="2" 
-                stroke-linecap = "square"
+                strokeLinecap = "square"
                 data-row={num + 1} />,
                 <line 
                 key={num-1}
@@ -29,7 +28,7 @@ const Grid = ({}) => {
                 x2={num * 50} 
                 y2="450" 
                 strokeWidth="2" 
-                stroke-linecap = "square"
+                strokeLinecap = "square"
                 data-column={num + 1} />
             ]
             initial=false
@@ -44,7 +43,7 @@ const Grid = ({}) => {
                 x2="450" 
                 y2={num * 50} 
                 strokeWidth="2" 
-                stroke-linecap = "square"
+                strokeLinecap = "square"
                 data-row={num + 1} />,
                 <line 
                 key={num*200}
@@ -56,7 +55,7 @@ const Grid = ({}) => {
                 x2={num * 50} 
                 y2="450" 
                 strokeWidth="2" 
-                stroke-linecap = "square"
+                strokeLinecap = "square"
                 data-column={num + 1} />)
         }
     })

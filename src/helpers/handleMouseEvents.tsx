@@ -3,8 +3,10 @@ import highlighter from "./highlighter"
 import deleteValues from "./deleteValue"
 import setValue from "./setValue";
 import setPencil from "./setPencil";
+import Settings from "../interfaces/Settings";
 
 const handleMouseEvents = (
+    settings:Settings,
     eventType: string,
     cellsp: IState["cells"],
     setCells: React.Dispatch<React.SetStateAction<IState["cells"]>>,
@@ -100,7 +102,7 @@ const handleMouseEvents = (
                 })
 
                 if (num != -1 && tmp != -1) {
-                    setValue(num, cells, setCells, selected, tmp)
+                    setValue(settings, num, cells, setCells, selected, tmp)
                 }
                 setCells([...cells])
 
@@ -126,7 +128,7 @@ const handleMouseEvents = (
                     })
 
                     if (num != -1 && tmp != -1) {
-                        setValue(num, cells, setCells, selected, tmp)
+                        setValue(settings, num, cells, setCells, selected, tmp)
                     }
                     setCells([...cells])
 

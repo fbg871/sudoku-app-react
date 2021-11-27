@@ -34,7 +34,7 @@ const SudokuBoard = ({ controls, setControls, cells, setCells, settings}: {
     cells.map((cell)=> {
         elem.push(
             <g className="cell-group" key={cell.index}>
-                <SudokuCell rectCell = {cell} selected={selected} setSelected={setSelected} cells = {cells} setCells = {setCells} leftClickDown={leftClickDown} setLeftClickDown={setLeftClickDown} />
+                <SudokuCell settings ={settings} rectCell = {cell} selected={selected} setSelected={setSelected} cells = {cells} setCells = {setCells} leftClickDown={leftClickDown} setLeftClickDown={setLeftClickDown} />
                 <Variant cell={cell} isThermo={settings.isThermo} isArrow={settings.isArrow} isPalindrome={settings.isPalindrome}></Variant>
                 <SudokuNumbers column={cell.column} row={cell.row} value={cell.value}></SudokuNumbers>
                 <PencilMarks isprefilled={cell.isPreFilled} column={cell.column} row={cell.row} value={cell.pencil} index={cell.index}></PencilMarks>
@@ -42,7 +42,7 @@ const SudokuBoard = ({ controls, setControls, cells, setCells, settings}: {
             </g>)
     })
     return (
-        <g className="cells" onKeyDown={(e) => handleKeyboardInput(e, selected, setSelected, cells, setCells)} tabIndex={0} 
+        <g className="cells" onKeyDown={(e) => handleKeyboardInput(settings, e, selected, setSelected, cells, setCells)} tabIndex={0} 
         // onMouseLeave={() => mouseReleased(100, undefined)}
         >
             {elem}

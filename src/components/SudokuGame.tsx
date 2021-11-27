@@ -16,7 +16,7 @@ export interface IState {
     settings: Settings
 }
 
-const SudokuGame = () => {
+const SudokuGame = ({settings, setSettings}: {settings:Settings, setSettings:React.Dispatch<React.SetStateAction<Settings>>}) => {
     var con:IState["controls"] = {isShift:false}
 
     var set:IState["settings"] = {
@@ -30,8 +30,6 @@ const SudokuGame = () => {
     const [cells, setCells] = useState(CreateArray())
 
     const [controls, setControls] = useState(con)
-
-    const [settings, setSettings] = useState(set)
 
     return (
         <svg className="sudoku-game" width="500" height="500" viewBox="-50 -50 550 550">

@@ -1,10 +1,3 @@
-import { setUncaughtExceptionCaptureCallback } from 'process';
-import React, { useState } from 'react';
-import { IState as Props } from "./SudokuGame";
-import PMark from './PMark';
-
-// Create a function that produces a small text element overlaying the top of the cell,
-// at a given cell index. Use css to place it in correct spot.
 
 const PencilMarks = ({ isprefilled, column, row, value, index }:
     {isprefilled:boolean, column: number, row: number, value: number[], index: number }) => {
@@ -34,11 +27,27 @@ const PencilMarks = ({ isprefilled, column, row, value, index }:
             }
             if(initialValue){
                 textelements=
-                [<PMark value={value} xpos={xpos} ypos={ypos}></PMark>]
+                [<text
+                    className="sudoku-pencilmarks"
+                    x={xpos}
+                    y={ypos}
+                    width="15"
+                    height="15"
+                >
+                    {value}
+                </text>]
             initialValue = false
             }else{
                 textelements.push(
-                <PMark value={value} xpos={xpos} ypos={ypos}></PMark>
+                    <text
+                    className="sudoku-pencilmarks"
+                    x={xpos}
+                    y={ypos}
+                    width="15"
+                    height="15"
+                >
+                    {value}
+                </text>
                 )
             }
             xpos = column * 50
@@ -46,7 +55,7 @@ const PencilMarks = ({ isprefilled, column, row, value, index }:
         })
     }
     return(
-        <g>
+        <g key = {index}>
         {textelements}
         </g>
     )

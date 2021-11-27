@@ -4,8 +4,10 @@ import highlighter from "./highlighter";
 import setValue from "./setValue";
 import setPencil from "./setPencil";
 import deleteValues from "./deleteValue";
+import Settings from "../interfaces/Settings";
 
 const handleKeyboardInput = (
+    settings:Settings,
     event: React.KeyboardEvent<SVGGElement>,
     selected:IState["selected"],
     setSelected:React.Dispatch<React.SetStateAction<IState["selected"]>>,
@@ -15,17 +17,18 @@ const handleKeyboardInput = (
 
 
 ) => {
-    console.log("handle")
     if (selected.length > 1) {
         if([1,2,3,4,5,6,7,8,9].includes(parseInt(event.key))){
             // pencilMarks(eventkey)
             setPencil(selected, cells, setCells, event)
+        } else if(event.key == "Backspace" || event.key == "Delete"){
+            deleteValues(cells, setCells, selected)
         }
 
     } else if (selected.length === 1 ) {
 
         if([1,2,3,4,5,6,7,8,9].includes(parseInt(event.key))){
-            setValue(selected[0], cells, setCells, selected, parseInt(event.key))
+            setValue(settings, selected[0], cells, setCells, selected, parseInt(event.key))
         } else if(event.key == "Backspace" || event.key == "Delete"){
             deleteValues(cells, setCells, selected)
         }

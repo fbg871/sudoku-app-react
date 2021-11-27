@@ -1,11 +1,12 @@
 import handleMouseEvents from "../helpers/handleMouseEvents";
 import incrementTemporary from "../helpers/incrementTemporary";
 import Cell from "../interfaces/Cell";
+import Settings from "../interfaces/Settings";
 import { IState } from "./SudokuGame";
 
-
-const SudokuCell = ({rectCell, selected, setSelected, cells, setCells, leftClickDown, setLeftClickDown}:
-    {rectCell:Cell,
+const SudokuCell = ({settings, rectCell, selected, setSelected, cells, setCells, leftClickDown, setLeftClickDown}:
+    {settings:Settings
+    rectCell:Cell,
     selected:IState["selected"],
     setSelected:React.Dispatch<React.SetStateAction<IState["selected"]>>,
     cells:IState["cells"], 
@@ -29,10 +30,9 @@ const SudokuCell = ({rectCell, selected, setSelected, cells, setCells, leftClick
                 width="50"
                 height="50"
 
-                onMouseDown={(e) => handleMouseEvents("click", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
-                onMouseMove={(e) => handleMouseEvents("move", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
-                onMouseUp={(e) => handleMouseEvents("release", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
-
+                onMouseDown={(e) => handleMouseEvents(settings,"click", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
+                onMouseMove={(e) => handleMouseEvents(settings,"move", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
+                onMouseUp={(e) => handleMouseEvents(settings,"release", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
 
                 onWheel={(e) => incrementTemporary(cells, setCells, e)}
 

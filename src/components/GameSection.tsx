@@ -1,9 +1,7 @@
 import { useState } from "react";
-import SudokuGrid, { IState } from "./SudokuGame";
+import SudokuGame, { IState } from "./SudokuGame";
 import SettingsPanel from "./SettingsPanel";
 import Settings from "../interfaces/Settings";
-
-
 
 const GameSection = () => {
 
@@ -11,18 +9,17 @@ const GameSection = () => {
         isThermo:true,
         isArrow:false,
         isPalindrome:false,
-        errorCheckType:false,
+        errorCheckType:true,
         highlightRelated:false    
     }
-
 
     const [settings, setSettings] = useState(set)
 
     return(
         <div className = "game-section">
-            <SudokuGrid />
+            <SudokuGame settings={settings} setSettings = {setSettings} />
 
-            <SettingsPanel settings = {settings} setSettings={setSettings} />
+            <SettingsPanel settingsp = {settings} setSettings={setSettings} />
         </div>
     )
 }

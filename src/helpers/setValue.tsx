@@ -3,14 +3,17 @@ import Cell from "../interfaces/Cell";
 import { IState } from "../components/SudokuGame";
 import errorCheck from "./errorCheck";
 import highlighter from "./highlighter";
+import Settings from "../interfaces/Settings";
 
-const setValue = (index:number, cellsp:IState['cells'], setCells:React.Dispatch<React.SetStateAction<IState["cells"]>>, selected:number[], value:number) => {
+const setValue = (settingsp: Settings,index:number, cellsp:IState['cells'], setCells:React.Dispatch<React.SetStateAction<IState["cells"]>>, selected:number[], value:number) => {
     
     const cells = cellsp
 
     var col = -1
     var row = -1
     var block = -1
+
+    const settings = settingsp
 
     cells.map((cell)=>{
         if(cell.index === index && !cell.isPreFilled){
@@ -26,7 +29,7 @@ const setValue = (index:number, cellsp:IState['cells'], setCells:React.Dispatch<
     })
 
     if(row !== -1 && col !== -1){
-        errorCheck(cells, setCells, index, value, col, row, block)
+        errorCheck(settings, cells, setCells, index, value, col, row, block)
     }
     highlighter(cellsp, setCells, selected)
 

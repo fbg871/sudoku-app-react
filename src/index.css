@@ -5,6 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* YOU NEED TO REMOVE THIS - IT STOPS SCROLLING */
+  overflow:hidden
 }
 
 code {
@@ -167,4 +170,8 @@ rect {
   width: 100%;
   height: 100%;
   position:center;
+}
+
+.grid {
+  pointer-events: none;
 }

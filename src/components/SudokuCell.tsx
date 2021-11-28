@@ -4,8 +4,10 @@ import Cell from "../interfaces/Cell";
 import Settings from "../interfaces/Settings";
 import { IState } from "./SudokuGame";
 
-const SudokuCell = ({settings, rectCell, selected, setSelected, cells, setCells, leftClickDown, setLeftClickDown}:
-    {settings:Settings
+const SudokuCell = ({filled, setFilled, settings, rectCell, selected, setSelected, cells, setCells, leftClickDown, setLeftClickDown}:
+    {filled:boolean[],
+    setFilled:React.Dispatch<React.SetStateAction<boolean[]>>,
+    settings:Settings,
     rectCell:Cell,
     selected:IState["selected"],
     setSelected:React.Dispatch<React.SetStateAction<IState["selected"]>>,
@@ -15,6 +17,10 @@ const SudokuCell = ({settings, rectCell, selected, setSelected, cells, setCells,
     setLeftClickDown: React.Dispatch<React.SetStateAction<boolean>>
 }
     ) => {
+
+        
+
+
         return(
             <rect className="sudoku-cell"
                 // key={cell.index}
@@ -30,9 +36,9 @@ const SudokuCell = ({settings, rectCell, selected, setSelected, cells, setCells,
                 width="50"
                 height="50"
 
-                onMouseDown={(e) => handleMouseEvents(settings,"click", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
-                onMouseMove={(e) => handleMouseEvents(settings,"move", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
-                onMouseUp={(e) => handleMouseEvents(settings,"release", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
+                onMouseDown={(e) => handleMouseEvents(filled, setFilled, settings,"click", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
+                onMouseMove={(e) => handleMouseEvents(filled, setFilled, settings,"move", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
+                onMouseUp={(e) => handleMouseEvents(filled, setFilled, settings,"release", cells, setCells, leftClickDown, setLeftClickDown, selected, setSelected, e, rectCell.index)}
 
                 onWheel={(e) => incrementTemporary(cells, setCells, e)}
 

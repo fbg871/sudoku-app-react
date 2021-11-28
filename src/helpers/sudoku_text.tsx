@@ -1,14 +1,27 @@
 
 export const sudoku_test = [
-    [6, 0, 0, 0, 4, 3, 0, 0, 0],
-    [0, 2, 9, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 6, 0, 4],
-    [3, 4, 1, 0, 0, 2, 0, 7, 0],
-    [0, 0, 0, 0, 0, 8, 9, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 3, 0],
-    [0, 1, 0, 6, 7, 4, 0, 0, 3],
-    [0, 0, 0, 0, 8, 0, 0, 0, 0],
-    [0, 5, 0, 1, 0, 0, 0, 0, 0]
+    [6, undefined, undefined, undefined, 4, 3, undefined, undefined, undefined],
+    [undefined, 2, 9, undefined, undefined, undefined, undefined, undefined, undefined],
+    [undefined, undefined, undefined, undefined, undefined, undefined, 6, undefined, 4],
+    [3, 4, 1, undefined, undefined, 2, undefined, 7, undefined],
+    [undefined, undefined, undefined, undefined, undefined, 8, 9, undefined, undefined],
+    [undefined, undefined, undefined, undefined, undefined, undefined, undefined, 3, undefined],
+    [undefined, 1, undefined, 6, 7, 4, undefined, undefined, 3],
+    [undefined, undefined, undefined, undefined, 8, undefined, undefined, undefined, undefined],
+    [undefined, 5, undefined, 1, undefined, undefined, undefined, undefined, undefined]
+]
+
+export const sudoku_flat = [
+    6, undefined, undefined, undefined, 4, 3, undefined, undefined, undefined,
+    undefined, 2, 9, undefined, undefined, undefined, undefined, undefined, undefined,
+    undefined, undefined, undefined, undefined, undefined, undefined, 6, undefined, 4,
+    3, 4, 1, undefined, undefined, 2, undefined, 7, undefined,
+    undefined, undefined, undefined, undefined, undefined, 8, 9, undefined, undefined,
+    undefined, undefined, undefined, undefined, undefined, undefined, undefined, 3, undefined,
+    undefined, 1, undefined, 6, 7, 4, undefined, undefined, 3,
+    undefined, undefined, undefined, undefined, 8, undefined, undefined, undefined, undefined,
+    undefined, 5, undefined, 1, undefined, undefined, undefined, undefined, undefined
+
 ]
 
 export const solved_test = [

@@ -4,8 +4,12 @@ import deleteValues from "./deleteValue"
 import setValue from "./setValue";
 import setPencil from "./setPencil";
 import Settings from "../interfaces/Settings";
+import React from "react";
+import produce from "immer";
 
 const handleMouseEvents = (
+    filled:boolean[] ,
+    setFilled: React.Dispatch<React.SetStateAction<boolean[]>>,
     settings:Settings,
     eventType: string,
     cellsp: IState["cells"],
@@ -17,6 +21,7 @@ const handleMouseEvents = (
     e: React.MouseEvent<SVGRectElement, MouseEvent>,
     index: number
 ) => {
+
 
     const cells = cellsp
 
@@ -35,11 +40,12 @@ const handleMouseEvents = (
         else if (e.button === 1) {
             e.preventDefault()
             if (selected.includes(index)) {
-                deleteValues(cells, setCells, selected)
+                deleteValues(filled, setFilled, cells, setCells, selected)
+            }else{
+                selected = []
+                selected.push(index)
+                setSelected([...selected])    
             }
-            selected = []
-            selected.push(index)
-            setSelected([...selected])
             highlighter(cells, setCells, selected)
         }
 
@@ -47,7 +53,7 @@ const handleMouseEvents = (
         else if (e.button === 2) {
             if (selected.length > 1 && selected.includes(index)) {
                 cells.map((cell) => {
-                    if (selected.includes(cell.index)) {
+                    if (selected.includes(cell.index) && !cell.isPreFilled) {
                         cell.isRightClick = true
                     }
                 })
@@ -67,6 +73,7 @@ const handleMouseEvents = (
                 setSelected([...selected])
                 highlighter(cells, setCells, selected)
             }
+            setCells([...cells])
         }
     } else if (eventType === "move") {
         if (leftClickDown) {
@@ -103,6 +110,8 @@ const handleMouseEvents = (
 
                 if (num != -1 && tmp != -1) {
                     setValue(settings, num, cells, setCells, selected, tmp)
+                    filled[num] = true
+                    setFilled(filled)
                 }
                 setCells([...cells])
 
@@ -111,7 +120,7 @@ const handleMouseEvents = (
             }
             // If middle click is released
             else if (e.button === 1) {
-                deleteValues(cells, setCells, selected)
+                deleteValues(filled, setFilled, cells, setCells, selected)
             }
             // If right click is released
             else if (e.button === 2) {
@@ -129,6 +138,8 @@ const handleMouseEvents = (
 
                     if (num != -1 && tmp != -1) {
                         setValue(settings, num, cells, setCells, selected, tmp)
+                        filled[num] = true
+                        setFilled(filled)
                     }
                     setCells([...cells])
 

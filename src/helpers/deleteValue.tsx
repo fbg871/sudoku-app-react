@@ -1,6 +1,10 @@
+import React, { SetStateAction } from "react";
 import { IState } from "../components/SudokuGame";
+import Cell from "../interfaces/Cell";
 
 const deleteValues = (
+    filled: boolean[], 
+    setFilled:React.Dispatch<React.SetStateAction<boolean[]>>,
     cellsp:IState["cells"], 
     setCells:React.Dispatch<React.SetStateAction<IState["cells"]>>, 
     selected:IState["selected"]
@@ -15,6 +19,9 @@ const deleteValues = (
 
                 cell.pencil = []
                 cell.error = false
+
+                filled[cell.index] = false
+                setFilled(filled)
             }
             cell.isRelated = false
         })

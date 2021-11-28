@@ -7,7 +7,7 @@ import GameSection from './components/GameSection';
 function App() {
   return (
     <div className="App">
-      <h1>Sudoku</h1>
+      {/* <h1>Sudoku</h1> */}
       <GameSection/>
     </div>
   );

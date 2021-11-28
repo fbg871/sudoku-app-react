@@ -6,13 +6,7 @@ import MouseSelector from './MouseSelector';
 import Variant from './VariantGrid';
 import handleKeyboardInput from '../helpers/handleKeyboardInput';
 import SudokuCell from './SudokuCell';
-
-// interface IProps {
-//     cell: Props["cell"]
-//     // setCell: React.Dispatch<React.SetStateAction<Props["cell"]>>
-// }
-
-
+import Gamestate from '../interfaces/GameState';
 
 const SudokuBoard = ({ controls, setControls, cells, setCells, settings}: {
     cells: IState["cells"]
@@ -24,17 +18,29 @@ const SudokuBoard = ({ controls, setControls, cells, setCells, settings}: {
     settings: IState["settings"]
 }) => {
 
+
     var lst: number[] = []
+
+    var lst2:boolean[] = new Array(81).fill(false)
+
+    var tst:Gamestate = {
+        filled: lst2,
+        selected: lst,
+        leftClickDown:false,
+        shiftDown:false
+    }
 
     const [selected, setSelected] = useState(lst)
     const [leftClickDown, setLeftClickDown] = useState(false)
 
-    var elem:JSX.Element[] = []
+    const [filled, setFilled] = useState(lst2)
 
+    var elem:JSX.Element[] = []
+    
     cells.map((cell)=> {
         elem.push(
             <g className="cell-group" key={cell.index}>
-                <SudokuCell settings ={settings} rectCell = {cell} selected={selected} setSelected={setSelected} cells = {cells} setCells = {setCells} leftClickDown={leftClickDown} setLeftClickDown={setLeftClickDown} />
+                <SudokuCell filled={filled} setFilled={setFilled} settings ={settings} rectCell = {cell} selected={selected} setSelected={setSelected} cells = {cells} setCells = {setCells} leftClickDown={leftClickDown} setLeftClickDown={setLeftClickDown} />
                 <Variant cell={cell} isThermo={settings.isThermo} isArrow={settings.isArrow} isPalindrome={settings.isPalindrome}></Variant>
                 <SudokuNumbers column={cell.column} row={cell.row} value={cell.value}></SudokuNumbers>
                 <PencilMarks isprefilled={cell.isPreFilled} column={cell.column} row={cell.row} value={cell.pencil} index={cell.index}></PencilMarks>
@@ -42,7 +48,7 @@ const SudokuBoard = ({ controls, setControls, cells, setCells, settings}: {
             </g>)
     })
     return (
-        <g className="cells" onKeyDown={(e) => handleKeyboardInput(settings, e, selected, setSelected, cells, setCells)} tabIndex={0} 
+        <g className="cells" onKeyDown={(e) => handleKeyboardInput(filled, setFilled, settings, e, selected, setSelected, cells, setCells)} tabIndex={0} 
         // onMouseLeave={() => mouseReleased(100, undefined)}
         >
             {elem}

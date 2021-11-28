@@ -6,6 +6,7 @@ import Cell from '../interfaces/Cell';
 import Settings from '../interfaces/Settings';
 
 import { sudoku_test, solved_test } from '../helpers/sudoku_text';
+import NewSudokuBoard from './NewSudokuBoard';
 
 export interface IState {
     cells: Cell[],
@@ -33,7 +34,8 @@ const SudokuGame = ({settings, setSettings}: {settings:Settings, setSettings:Rea
 
     return (
         <svg className="sudoku-game" width="500" height="500" viewBox="-50 -50 550 550">
-            <SudokuBoard controls={controls} setControls={setControls} cells={cells} setCells={setCells} settings={settings}/>
+            {/* <SudokuBoard controls={controls} setControls={setControls} cells={cells} setCells={setCells} settings={settings}/> */}
+            <NewSudokuBoard controls={controls} setControls={setControls} cells={cells} setCells={setCells} settings={settings} />
             <Grid/>
         </svg>
     );

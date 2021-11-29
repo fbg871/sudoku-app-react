@@ -7,8 +7,11 @@ import Settings from '../interfaces/Settings'
 import React from 'react'
 import produce from 'immer'
 import { setConstantValue } from 'typescript'
+import newErrorCheck from './newErrorCheck'
 
 const newHandleMouseEvents = (
+	error: boolean,
+	setError: React.Dispatch<React.SetStateAction<boolean>>,
 	pencilmarks: (number[] | undefined)[],
 	setPencilmarks: React.Dispatch<
 		React.SetStateAction<(number[] | undefined)[]>
@@ -130,7 +133,7 @@ const newHandleMouseEvents = (
 			if (e.button === 0) {
 				setLeftClickDown(false)
 				if (!selected.includes(index) && !isPreFilled) {
-					let sel = Object.assign([], selected)
+					let sel = selected.slice()
 					sel.push(index)
 					setSelected(sel)
 				}
@@ -159,6 +162,7 @@ const newHandleMouseEvents = (
 						temp_copy[index] = undefined
 						setValues(vals_copy)
 						setTemporaryValues(temp_copy)
+						newErrorCheck(error, setError, vals_copy, selected)
 					}
 				} else if (selected.length > 1) {
 					let pencil_copy = pencilmarks.map((inner) => inner?.slice())

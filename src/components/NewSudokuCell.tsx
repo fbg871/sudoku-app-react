@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import incrementTemporary from '../helpers/incrementTemporary'
 import newHandleMouseEvents from '../helpers/newHandleMouseEvents'
 import newIncrementTemporary from '../helpers/newIncrementTemporary'
+import { sudoku_flat } from '../helpers/sudoku_text'
 import Cell from '../interfaces/Cell'
 import Settings from '../interfaces/Settings'
 import NewPencilMarks from './NewPencilMarks'
@@ -81,6 +82,8 @@ const NewSudokuCell = ({
 				height="50"
 				onMouseDown={(e) =>
 					newHandleMouseEvents(
+						error,
+						setError,
 						pencilmarks,
 						setPencilmarks,
 						isPreFilled,
@@ -101,6 +104,8 @@ const NewSudokuCell = ({
 				}
 				onMouseMove={(e) =>
 					newHandleMouseEvents(
+						error,
+						setError,
 						pencilmarks,
 						setPencilmarks,
 						isPreFilled,
@@ -121,6 +126,8 @@ const NewSudokuCell = ({
 				}
 				onMouseUp={(e) =>
 					newHandleMouseEvents(
+						error,
+						setError,
 						pencilmarks,
 						setPencilmarks,
 						isPreFilled,

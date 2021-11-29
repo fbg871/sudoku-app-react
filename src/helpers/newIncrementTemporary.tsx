@@ -1,67 +1,78 @@
 import { SetStateAction } from 'react'
+import SudokuState from '../interfaces/SudokuState'
 
 const newIncrementTemporary = (
 	event: React.WheelEvent<SVGRectElement>,
-	rightClickDown: number[],
-	temporaryValues: (number | undefined)[],
-	setTemporaryValues: React.Dispatch<SetStateAction<(number | undefined)[]>>
+	sudokuState: SudokuState,
+	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>
 ) => {
-	if (rightClickDown.length === 1) {
+	let sudokuState_copy: SudokuState = Object.assign({}, sudokuState)
+
+	if (sudokuState.rightClickDown.length === 1) {
 		if (event.nativeEvent.deltaY < 0) {
-			let tmp_copy = temporaryValues.slice()
-			if (tmp_copy[rightClickDown[0]] === undefined) {
-				tmp_copy[rightClickDown[0]] = 1
-				setTemporaryValues(tmp_copy)
-			} else if (tmp_copy[rightClickDown[0]] === 9) {
-				tmp_copy[rightClickDown[0]] = undefined
-				setTemporaryValues(tmp_copy)
+			if (
+				sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === undefined
+			) {
+				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] = 1
+			} else if (
+				sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === 9
+			) {
+				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] =
+					undefined
 			} else {
-				tmp_copy[rightClickDown[0]]!++
-				setTemporaryValues(tmp_copy)
+				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]]!++
 			}
 		} else {
-			if (temporaryValues[rightClickDown[0]] === undefined) {
-				let tmp_copy = temporaryValues.slice()
-				tmp_copy[rightClickDown[0]] = 9
-				setTemporaryValues(tmp_copy)
-			} else if (temporaryValues[rightClickDown[0]] === 1) {
-				let tmp_copy = temporaryValues.slice()
-				tmp_copy[rightClickDown[0]] = undefined
-				setTemporaryValues(tmp_copy)
+			if (
+				sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === undefined
+			) {
+				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] = 9
+			} else if (
+				sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === 1
+			) {
+				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] =
+					undefined
 			} else {
-				let tmp_copy = temporaryValues.slice()
-				tmp_copy[rightClickDown[0]]!--
-				setTemporaryValues(tmp_copy)
+				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]]!--
 			}
 		}
-	} else if (rightClickDown.length > 1) {
-		let tmp_copy = temporaryValues.slice()
-		for (let i = 0; i < rightClickDown.length; i++) {
+		setSudokuState(sudokuState_copy)
+	} else if (sudokuState.rightClickDown.length > 1) {
+		for (let i = 0; i < sudokuState.rightClickDown.length; i++) {
 			if (event.nativeEvent.deltaY < 0) {
 				// let tmp_copy = temporaryValues.slice()
-				if (tmp_copy[rightClickDown[i]] === undefined) {
-					tmp_copy[rightClickDown[i]] = 1
-				} else if (tmp_copy[rightClickDown[i]] === 9) {
-					tmp_copy[rightClickDown[i]] = 1
+				if (
+					sudokuState.temporaryValues[sudokuState.rightClickDown[i]] ===
+					undefined
+				) {
+					sudokuState_copy.temporaryValues[sudokuState.rightClickDown[i]] = 1
+				} else if (
+					sudokuState.temporaryValues[sudokuState.rightClickDown[i]] === 9
+				) {
+					sudokuState_copy.temporaryValues[sudokuState.rightClickDown[i]] = 1
 				} else {
-					tmp_copy[rightClickDown[i]]!++
+					sudokuState_copy.temporaryValues[sudokuState.rightClickDown[i]]!++
 				}
 			} else {
-				if (temporaryValues[rightClickDown[i]] === undefined) {
+				if (
+					sudokuState.temporaryValues[sudokuState.rightClickDown[i]] ===
+					undefined
+				) {
 					// let tmp_copy = temporaryValues.slice()
-					tmp_copy[rightClickDown[i]] = 9
-				} else if (temporaryValues[rightClickDown[i]] === 1) {
+					sudokuState_copy.temporaryValues[sudokuState.rightClickDown[i]] = 9
+				} else if (
+					sudokuState.temporaryValues[sudokuState.rightClickDown[i]] === 1
+				) {
 					// let tmp_copy = temporaryValues.slice()
-					tmp_copy[rightClickDown[i]] = 9
+					sudokuState_copy.temporaryValues[sudokuState.rightClickDown[i]] = 9
 				} else {
 					// let tmp_copy = temporaryValues.slice()
-					tmp_copy[rightClickDown[i]]!--
+					sudokuState_copy.temporaryValues[sudokuState.rightClickDown[i]]!--
 				}
 			}
 		}
-		setTemporaryValues(tmp_copy)
+		setSudokuState(sudokuState_copy)
 	}
-	console.log(temporaryValues)
 }
 
 export default newIncrementTemporary

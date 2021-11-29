@@ -17,7 +17,6 @@ const GameSection = () => {
 	return (
 		<div className="game-section">
 			<SudokuGame settings={settings} setSettings={setSettings} />
-
 			<SettingsPanel settingsp={settings} setSettings={setSettings} />
 		</div>
 	)

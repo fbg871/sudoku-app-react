@@ -46,13 +46,7 @@ const SudokuGame = ({
 			viewBox="-50 -50 550 550"
 		>
 			{/* <SudokuBoard controls={controls} setControls={setControls} cells={cells} setCells={setCells} settings={settings}/> */}
-			<NewSudokuBoard
-				controls={controls}
-				setControls={setControls}
-				cells={cells}
-				setCells={setCells}
-				settings={settings}
-			/>
+			<NewSudokuBoard settings={settings} />
 			<Grid />
 		</svg>
 	)

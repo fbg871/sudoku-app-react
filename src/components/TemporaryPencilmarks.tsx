@@ -12,10 +12,6 @@ const TemporaryPencilmarks = ({
 	var xpos: number = Math.floor(index / 9) * 50
 	var ypos: number = (index % 9) * 50
 
-	var initialValue = true
-
-	var textelements: JSX.Element[] = []
-
 	if (!isprefilled && temporaryValues != undefined) {
 		if (temporaryValues == 1 || temporaryValues == 4 || temporaryValues == 7) {
 			xpos = xpos + 7
@@ -45,7 +41,7 @@ const TemporaryPencilmarks = ({
 	return (
 		<motion.text
 			initial={{ opacity: 0 }}
-			animate={{ opacity: 0.6 }}
+			animate={{ opacity: 0.4 }}
 			exit={{ opacity: 0 }}
 			className="sudoku-pencilmarks"
 			x={xpos}

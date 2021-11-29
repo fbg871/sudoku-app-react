@@ -1,12 +1,10 @@
 const NewPencilMarks = ({
 	isprefilled,
 	pencilmarks,
-	setPencilmarks,
 	index,
 }: {
 	isprefilled: boolean
 	pencilmarks: (number[] | undefined)[]
-	setPencilmarks: React.Dispatch<React.SetStateAction<(number[] | undefined)[]>>
 	index: number
 }) => {
 	var xpos: number = Math.floor(index / 9) * 50
@@ -16,7 +14,7 @@ const NewPencilMarks = ({
 
 	var textelements: JSX.Element[] = []
 	if (!isprefilled) {
-		if (pencilmarks[index] !== undefined) {
+		if (pencilmarks[index] !== undefined && pencilmarks[index]) {
 			pencilmarks[index]!.map((value) => {
 				if (value == 1 || value == 4 || value == 7) {
 					xpos = xpos + 7

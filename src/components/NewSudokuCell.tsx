@@ -1,54 +1,22 @@
 import { motion } from 'framer-motion'
 import React, { useState } from 'react'
-import incrementTemporary from '../helpers/incrementTemporary'
 import newHandleMouseEvents from '../helpers/newHandleMouseEvents'
 import newIncrementTemporary from '../helpers/newIncrementTemporary'
 import { sudoku_flat } from '../helpers/sudoku_text'
 import Cell from '../interfaces/Cell'
 import Settings from '../interfaces/Settings'
+import SudokuState from '../interfaces/SudokuState'
 import NewPencilMarks from './NewPencilMarks'
-import { IState } from './SudokuGame'
 import TemporaryPencilmarks from './TemporaryPencilmarks'
 
 const NewSudokuCell = ({
-	pencilmarks,
-	setPencilmarks,
-	temporaryValues,
-	setTemporaryValues,
-	leftClickDown,
-	setLeftClickDown,
-	rightClickDown,
-	setRightClickDown,
-	selected,
-	setSelected,
+	sudokuState,
+	setSudokuState,
 	index,
-	values,
-	setValues,
-	filled,
-	setFilled,
 }: {
-	pencilmarks: (number[] | undefined)[]
-	setPencilmarks: React.Dispatch<React.SetStateAction<(number[] | undefined)[]>>
-
-	temporaryValues: (number | undefined)[]
-	setTemporaryValues: React.Dispatch<
-		React.SetStateAction<(number | undefined)[]>
-	>
-
-	leftClickDown: boolean
-	setLeftClickDown: React.Dispatch<React.SetStateAction<boolean>>
-
-	rightClickDown: number[]
-	setRightClickDown: React.Dispatch<React.SetStateAction<number[]>>
-
-	selected: number[]
-	setSelected: React.Dispatch<React.SetStateAction<number[]>>
-
+	sudokuState: SudokuState
+	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>
 	index: number
-	values: (number | undefined)[]
-	setValues: React.Dispatch<React.SetStateAction<(number | undefined)[]>>
-	filled: boolean[]
-	setFilled: React.Dispatch<React.SetStateAction<boolean[]>>
 }) => {
 	// Pass index, value to this component. don't make state
 
@@ -57,7 +25,7 @@ const NewSudokuCell = ({
 
 	var pref: boolean = false
 
-	if (values[index] !== undefined) {
+	if (sudokuState.values[index] !== undefined) {
 		pref = true
 	}
 
@@ -71,9 +39,9 @@ const NewSudokuCell = ({
 				className="sudoku-cell"
 				// key={cell.index}
 				data-isprefilled={isPreFilled}
-				data-isselected={selected.includes(index)}
+				data-isselected={sudokuState.selected.includes(index)}
 				data-isrelated={isRelated}
-				data-isrightclick={rightClickDown.includes(index)}
+				data-isrightclick={sudokuState.rightClickDown.includes(index)}
 				data-error={error}
 				data-index={index}
 				x={Math.floor(index / 9) * 50}
@@ -82,78 +50,41 @@ const NewSudokuCell = ({
 				height="50"
 				onMouseDown={(e) =>
 					newHandleMouseEvents(
+						sudokuState,
+						setSudokuState,
 						error,
 						setError,
-						pencilmarks,
-						setPencilmarks,
 						isPreFilled,
-						temporaryValues,
-						setTemporaryValues,
-						values,
-						setValues,
 						'click',
-						leftClickDown,
-						setLeftClickDown,
-						rightClickDown,
-						setRightClickDown,
-						selected,
-						setSelected,
 						e,
 						index
 					)
 				}
 				onMouseMove={(e) =>
 					newHandleMouseEvents(
+						sudokuState,
+						setSudokuState,
 						error,
 						setError,
-						pencilmarks,
-						setPencilmarks,
 						isPreFilled,
-						temporaryValues,
-						setTemporaryValues,
-						values,
-						setValues,
 						'move',
-						leftClickDown,
-						setLeftClickDown,
-						rightClickDown,
-						setRightClickDown,
-						selected,
-						setSelected,
 						e,
 						index
 					)
 				}
 				onMouseUp={(e) =>
 					newHandleMouseEvents(
+						sudokuState,
+						setSudokuState,
 						error,
 						setError,
-						pencilmarks,
-						setPencilmarks,
 						isPreFilled,
-						temporaryValues,
-						setTemporaryValues,
-						values,
-						setValues,
 						'release',
-						leftClickDown,
-						setLeftClickDown,
-						rightClickDown,
-						setRightClickDown,
-						selected,
-						setSelected,
 						e,
 						index
 					)
 				}
-				onWheel={(e) =>
-					newIncrementTemporary(
-						e,
-						rightClickDown,
-						temporaryValues,
-						setTemporaryValues
-					)
-				}
+				onWheel={(e) => newIncrementTemporary(e, sudokuState, setSudokuState)}
 				onContextMenu={(e) => e.preventDefault()}
 			/>
 			<text
@@ -163,35 +94,36 @@ const NewSudokuCell = ({
 				width="50"
 				height="50"
 			>
-				{values[index]}
+				{sudokuState.values[index]}
 			</text>
-			{rightClickDown.includes(index) && selected.length === 1 && (
-				<motion.text
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 0.6 }}
-					exit={{ opacity: 0 }}
-					className="mouse-selector"
-					x={Math.floor(index / 9) * 50 + 25}
-					y={(index % 9) * 50 + 25}
-					width="50"
-					height="50"
-				>
-					{temporaryValues[index]}
-				</motion.text>
-			)}
-			{rightClickDown.includes(index) && selected.length > 1 && (
-				<TemporaryPencilmarks
-					index={index}
-					isprefilled={isPreFilled}
-					temporaryValues={temporaryValues[index]}
-				/>
+			{sudokuState.rightClickDown.includes(index) &&
+				sudokuState.selected.length === 1 && (
+					<motion.text
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 0.4 }}
+						exit={{ opacity: 0 }}
+						className="mouse-selector"
+						x={Math.floor(index / 9) * 50 + 25}
+						y={(index % 9) * 50 + 25}
+						width="50"
+						height="50"
+					>
+						{sudokuState.temporaryValues[index]}
+					</motion.text>
+				)}
+			{sudokuState.rightClickDown.includes(index) &&
+				sudokuState.selected.length > 1 && (
+					<TemporaryPencilmarks
+						index={index}
+						isprefilled={isPreFilled}
+						temporaryValues={sudokuState.temporaryValues[index]}
+					/>
 
-				// <NewPencilMarks  isprefilled = {isPreFilled} column={index % 9} row={index % 9} pencilmarks={pencilmarks} setPencilmarks={setPencilmarks} index={index}/>
-			)}
+					// <NewPencilMarks  isprefilled = {isPreFilled} column={index % 9} row={index % 9} pencilmarks={pencilmarks} setPencilmarks={setPencilmarks} index={index}/>
+				)}
 			<NewPencilMarks
 				isprefilled={isPreFilled}
-				pencilmarks={pencilmarks}
-				setPencilmarks={setPencilmarks}
+				pencilmarks={sudokuState.pencilmarks}
 				index={index}
 			/>
 		</g>

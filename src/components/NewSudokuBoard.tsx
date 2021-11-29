@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { IState } from "./SudokuGame";
-import PencilMarks from "./PencilMarks";
-import SudokuNumbers from "./SudokuNumbers";
-import MouseSelector from "./MouseSelector";
-import Variant from "./VariantGrid";
-import handleKeyboardInput from "../helpers/handleKeyboardInput";
-import SudokuCell from "./SudokuCell";
-import Gamestate from "../interfaces/GameState";
-import { sudoku_flat, sudoku_test } from "../helpers/sudoku_text";
-import NewSudokuCell from "./NewSudokuCell";
+import React, { useState, useEffect } from 'react'
+import { IState } from './SudokuGame'
+import PencilMarks from './PencilMarks'
+import SudokuNumbers from './SudokuNumbers'
+import MouseSelector from './MouseSelector'
+import Variant from './VariantGrid'
+import handleKeyboardInput from '../helpers/handleKeyboardInput'
+import SudokuCell from './SudokuCell'
+import Gamestate from '../interfaces/GameState'
+import { sudoku_flat, sudoku_test } from '../helpers/sudoku_text'
+import NewSudokuCell from './NewSudokuCell'
 
 const NewSudokuBoard = ({
 	controls,
@@ -17,37 +17,37 @@ const NewSudokuBoard = ({
 	setCells,
 	settings,
 }: {
-	cells: IState["cells"];
-	setCells: React.Dispatch<React.SetStateAction<IState["cells"]>>;
+	cells: IState['cells']
+	setCells: React.Dispatch<React.SetStateAction<IState['cells']>>
 
-	controls: IState["controls"];
-	setControls: React.Dispatch<React.SetStateAction<IState["controls"]>>;
+	controls: IState['controls']
+	setControls: React.Dispatch<React.SetStateAction<IState['controls']>>
 
-	settings: IState["settings"];
+	settings: IState['settings']
 }) => {
-	var lst: number[] = [];
+	var lst: number[] = []
 
-	var pencils: (number[] | undefined)[] = new Array(81).fill(undefined);
+	var pencils: (number[] | undefined)[] = new Array(81).fill(undefined)
 
-	console.log(pencils);
-	var tempval: (number | undefined)[] = new Array(81).fill(undefined);
+	console.log(pencils)
+	var tempval: (number | undefined)[] = new Array(81).fill(undefined)
 
-	var lst2: boolean[] = new Array(81).fill(false);
+	var lst2: boolean[] = new Array(81).fill(false)
 
 	// List of indices of selected cells
-	const [selected, setSelected] = useState(lst);
+	const [selected, setSelected] = useState(lst)
 
-	const [values, setValues] = useState(sudoku_flat);
-	const [temporaryValues, setTemporaryValues] = useState(tempval);
+	const [values, setValues] = useState(sudoku_flat)
+	const [temporaryValues, setTemporaryValues] = useState(tempval)
 
-	const [pencilmarks, setPencilmarks] = useState(pencils);
+	const [pencilmarks, setPencilmarks] = useState(pencils)
 
-	const [leftClickDown, setLeftClickDown] = useState(false);
-	const [rightClickDown, setRightClickDown] = useState(lst);
+	const [leftClickDown, setLeftClickDown] = useState(false)
+	const [rightClickDown, setRightClickDown] = useState(lst)
 
-	const [filled, setFilled] = useState(lst2);
+	const [filled, setFilled] = useState(lst2)
 
-	var elem: JSX.Element[] = [];
+	var elem: JSX.Element[] = []
 
 	for (let i = 0; i < sudoku_test.length; i++) {
 		for (let j = 0; j < sudoku_test[i].length; j++) {
@@ -70,7 +70,7 @@ const NewSudokuBoard = ({
 						filled={filled}
 						setFilled={setFilled}
 					/>
-				);
+				)
 			} else {
 				elem.push(
 					<NewSudokuCell
@@ -90,7 +90,7 @@ const NewSudokuBoard = ({
 						filled={filled}
 						setFilled={setFilled}
 					/>
-				);
+				)
 			}
 		}
 	}
@@ -115,7 +115,7 @@ const NewSudokuBoard = ({
 		>
 			{elem}
 		</g>
-	);
-};
+	)
+}
 
-export default NewSudokuBoard;
+export default NewSudokuBoard

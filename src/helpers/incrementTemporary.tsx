@@ -1,9 +1,9 @@
-import { IState } from "../components/SudokuGame"
-import produce from "immer"
+import { IState } from '../components/SudokuGame'
+import produce from 'immer'
 
 const incrementTemporary = (
-	cellsp: IState["cells"],
-	setCells: React.Dispatch<React.SetStateAction<IState["cells"]>>,
+	cellsp: IState['cells'],
+	setCells: React.Dispatch<React.SetStateAction<IState['cells']>>,
 	event: React.WheelEvent<SVGRectElement>
 ) => {
 	const cells = cellsp

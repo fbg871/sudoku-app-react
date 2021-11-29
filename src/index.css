@@ -1,177 +1,172 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 
-  /* YOU NEED TO REMOVE THIS - IT STOPS SCROLLING */
-  overflow:hidden
+	/* YOU NEED TO REMOVE THIS - IT STOPS SCROLLING */
+	overflow: hidden;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+		monospace;
 }
 
-.App{
-  padding-right:10%;
-  padding-left: 10%;
+.App {
+	padding-right: 10%;
+	padding-left: 10%;
 }
-
 
 /* Class for rect in grid */
 .sudoku-cell {
-  fill:transparent;
+	fill: transparent;
 }
 
 svg {
-  width: 100%;
-  position: center;
+	width: 100%;
+	position: center;
 }
 
 /* Class for text  */
 .cell-input {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  outline-width: 0;
-  font-size:34px;
-  background: transparent;
-  border:none;
-  caret-color: transparent;
-  /* cursor:none; */
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	outline-width: 0;
+	font-size: 34px;
+	background: transparent;
+	border: none;
+	caret-color: transparent;
+	/* cursor:none; */
 }
 
-[data-isprefilled=true] {
-  fill:#DDDDDD;
+[data-isprefilled='true'] {
+	fill: #dddddd;
 }
 
-[data-error=true] {
-  fill: #eb7f7f !important;
+[data-error='true'] {
+	fill: #eb7f7f !important;
 }
 
-[data-isselected=true] {
-  fill:#7FDBFF;
-  opacity:70%;
-  stroke: black;
-  stroke-width: 4;
-  stroke-linecap:"butt";
-  overflow:hidden;
+[data-isselected='true'] {
+	fill: #7fdbff;
+	opacity: 70%;
+	stroke: black;
+	stroke-width: 4;
+	stroke-linecap: 'butt';
+	overflow: hidden;
 }
 
-[data-isrightclick=true] {
-  fill:#62d3ff;
-  opacity:70%;
+[data-isrightclick='true'] {
+	fill: #62d3ff;
+	opacity: 70%;
 }
 
-[data-isrelated=true] {
-  fill:#7FDBFF;
-  opacity: 100%;
+[data-isrelated='true'] {
+	fill: #7fdbff;
+	opacity: 100%;
 }
 
-[data-isrightclick=true] {
-  cursor:none;
+[data-isrightclick='true'] {
+	cursor: none;
 }
 
-[data-isprefilled=true][data-isrelated=true] {
-  fill: #64a7c2;
+[data-isprefilled='true'][data-isrelated='true'] {
+	fill: #64a7c2;
 }
 
-
-[data-isprefilled=true][data-isselected=true]{
-  fill:#64a7c2;
+[data-isprefilled='true'][data-isselected='true'] {
+	fill: #64a7c2;
 }
-
 
 /* Create bold gridlines */
-[data-row="1"], 
-[data-row = "4"], 
-[data-row="7"], 
-[data-row="10"],
-[data-column="1"],
-[data-column="4"],
-[data-column="7"],
-[data-column="10"]
-{
-  stroke-width: 4;
+[data-row='1'],
+[data-row='4'],
+[data-row='7'],
+[data-row='10'],
+[data-column='1'],
+[data-column='4'],
+[data-column='7'],
+[data-column='10'] {
+	stroke-width: 4;
 }
 
-.cell-group{
-  pointer-events:none;
+.cell-group {
+	pointer-events: none;
 }
 
 /* SVG <rect> element */
 rect {
-  pointer-events: auto;
+	pointer-events: auto;
 }
 
 /* SVG <text> element */
 .sudoku-numbers {
-  outline-width: 0;
-  font-size:34px;
-  text-anchor: middle;
-  alignment-baseline: central;
-  font-weight: bolder;
-  pointer-events:none;
+	outline-width: 0;
+	font-size: 34px;
+	text-anchor: middle;
+	alignment-baseline: central;
+	font-weight: bolder;
+	pointer-events: none;
 
-  /* Makes text not highlightable */
-  -webkit-user-select: none; /* Safari */        
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+/Edge */
-  user-select: none; /* Standard */
+	/* Makes text not highlightable */
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
 }
 
 .sudoku-pencilmarks {
-  font-size:13px;
-  font-weight: bold;
-  outline-width: 0;
+	font-size: 13px;
+	font-weight: bold;
+	outline-width: 0;
 
-  /* Makes text not highlightable */
-  -webkit-user-select: none; /* Safari */        
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+/Edge */
-  user-select: none; /* Standard */
+	/* Makes text not highlightable */
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
 }
 
 .test {
-  fill:transparent;
-  background-color: transparent;
+	fill: transparent;
+	background-color: transparent;
 }
 
 .oi {
-  background-color:blue;
-  width: 50px;
-  height: 50px;
+	background-color: blue;
+	width: 50px;
+	height: 50px;
 }
 
 .mouse-selector {
-  outline-width: 0;
-  font-size:27px;
-  text-anchor: middle;
-  alignment-baseline: central;
-  font-weight: bolder;
-  pointer-events:none;
-  cursor:none;
+	outline-width: 0;
+	font-size: 27px;
+	text-anchor: middle;
+	alignment-baseline: central;
+	font-weight: bolder;
+	pointer-events: none;
+	cursor: none;
 }
 
 .thermo {
-  fill: lightgray;
-  stroke:lightgray;
-
+	fill: lightgray;
+	stroke: lightgray;
 }
 
 .thermo-cell {
-  overflow: hidden;
+	overflow: hidden;
 }
 
 .settings {
-  width: 100%;
-  height: 100%;
-  position:center;
+	width: 100%;
+	height: 100%;
+	position: center;
 }
 
 .grid {
-  pointer-events: none;
+	pointer-events: none;
 }

@@ -1,8 +1,7 @@
 body {
 	margin: 0;
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-		sans-serif;
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
@@ -11,13 +10,18 @@ body {
 }
 
 code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-		monospace;
+	/* font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+		monospace; */
+	font-family: 'MyFont';
 }
 
 .App {
 	padding-right: 10%;
 	padding-left: 10%;
+}
+
+rect:focus {
+	outline: 0;
 }
 
 /* Class for rect in grid */
@@ -54,10 +58,6 @@ svg {
 [data-isselected='true'] {
 	fill: #7fdbff;
 	opacity: 70%;
-	stroke: black;
-	stroke-width: 4;
-	stroke-linecap: 'butt';
-	overflow: hidden;
 }
 
 [data-isrightclick='true'] {
@@ -91,7 +91,7 @@ svg {
 [data-column='4'],
 [data-column='7'],
 [data-column='10'] {
-	stroke-width: 4;
+	stroke-width: 2;
 }
 
 .cell-group {
@@ -111,24 +111,12 @@ rect {
 	alignment-baseline: central;
 	font-weight: bolder;
 	pointer-events: none;
-
-	/* Makes text not highlightable */
-	-webkit-user-select: none; /* Safari */
-	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10+/Edge */
-	user-select: none; /* Standard */
 }
 
 .sudoku-pencilmarks {
 	font-size: 13px;
 	font-weight: bold;
 	outline-width: 0;
-
-	/* Makes text not highlightable */
-	-webkit-user-select: none; /* Safari */
-	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10+/Edge */
-	user-select: none; /* Standard */
 }
 
 .test {
@@ -177,4 +165,32 @@ rect {
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+/Edge */
 	user-select: none; /* Standard */
+}
+
+.sudoku-pencilmarks-cancel {
+	font-size: 13px;
+	font-weight: bold;
+	outline-width: 0;
+	text-decoration: line-through;
+}
+
+.cancel {
+	font-size: 15px;
+	font-weight: bolder;
+	outline-width: 0;
+	fill: red;
+}
+
+svg,
+text {
+	/* Makes text not highlightable */
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}
+
+.temp-test {
+	fill: #53b8e0;
+	pointer-events: none;
 }

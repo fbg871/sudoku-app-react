@@ -3,54 +3,91 @@ import { motion } from 'framer-motion'
 const TemporaryPencilmarks = ({
 	index,
 	isprefilled,
-	temporaryValues,
+	temporary,
+	pencilmarks,
 }: {
 	index: number
 	isprefilled: boolean
-	temporaryValues: number | undefined
+	temporary: number | undefined
+	pencilmarks: number[] | undefined
 }) => {
-	var xpos: number = Math.floor(index / 9) * 50
-	var ypos: number = (index % 9) * 50
+	var ypos: number = Math.floor(index / 9) * 50
+	var xpos: number = (index % 9) * 50
 
-	if (!isprefilled && temporaryValues != undefined) {
-		if (temporaryValues == 1 || temporaryValues == 4 || temporaryValues == 7) {
+	if (!isprefilled && temporary !== undefined) {
+		if (temporary === 1 || temporary === 4 || temporary === 7) {
 			xpos = xpos + 7
-		} else if (
-			temporaryValues == 2 ||
-			temporaryValues == 5 ||
-			temporaryValues == 8
-		) {
+		} else if (temporary === 2 || temporary === 5 || temporary === 8) {
 			xpos = xpos + 22
 		} else {
 			xpos = xpos + 37
 		}
 
-		if (temporaryValues == 1 || temporaryValues == 2 || temporaryValues == 3) {
+		if (temporary === 1 || temporary === 2 || temporary === 3) {
 			ypos = ypos + 15
-		} else if (
-			temporaryValues == 4 ||
-			temporaryValues == 5 ||
-			temporaryValues == 6
-		) {
+		} else if (temporary === 4 || temporary === 5 || temporary === 6) {
 			ypos = ypos + 29
 		} else {
 			ypos = ypos + 43
 		}
 	}
 
+	if (pencilmarks !== undefined && temporary !== undefined) {
+		if (pencilmarks.includes(temporary)) {
+			return (
+				<g>
+					<motion.rect
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 0.4 }}
+						exit={{ opacity: 0 }}
+						className="temp-test"
+						y={Math.floor(index / 9) * 50}
+						x={(index % 9) * 50}
+						width="50"
+						height="50"
+					></motion.rect>
+					<motion.text
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						className="cancel"
+						x={xpos}
+						y={ypos}
+						width="15"
+						height="15"
+					>
+						/
+					</motion.text>
+				</g>
+			)
+		}
+	}
+
 	return (
-		<motion.text
-			initial={{ opacity: 0 }}
-			animate={{ opacity: 0.4 }}
-			exit={{ opacity: 0 }}
-			className="sudoku-pencilmarks"
-			x={xpos}
-			y={ypos}
-			width="15"
-			height="15"
-		>
-			{temporaryValues}
-		</motion.text>
+		<g>
+			<motion.rect
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 0.4 }}
+				exit={{ opacity: 0 }}
+				className="temp-test"
+				y={Math.floor(index / 9) * 50}
+				x={(index % 9) * 50}
+				width="50"
+				height="50"
+			></motion.rect>
+			<motion.text
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 0.4 }}
+				exit={{ opacity: 0 }}
+				className="sudoku-pencilmarks"
+				x={xpos}
+				y={ypos}
+				width="15"
+				height="15"
+			>
+				{temporary}
+			</motion.text>
+		</g>
 	)
 }
 

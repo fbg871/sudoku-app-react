@@ -5,4 +5,8 @@ export default interface SudokuState {
 	pencilmarks: (number[] | undefined)[]
 	leftClickDown: boolean
 	rightClickDown: number[]
+	related: number[]
+	preFilled: boolean[]
+	error: boolean[]
+	shiftDown: boolean
 }

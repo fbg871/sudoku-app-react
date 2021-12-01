@@ -4,6 +4,7 @@ interface Settings {
 	isPalindrome: boolean
 	errorCheckType: boolean
 	highlightRelated: boolean
+	pencilmarkType: boolean
 }
 
 export default Settings

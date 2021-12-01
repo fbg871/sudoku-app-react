@@ -1,59 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import { IState } from "./SudokuGame";
-import PencilMarks from './PencilMarks';
-import SudokuNumbers from './SudokuNumbers';
-import MouseSelector from './MouseSelector';
-import Variant from './VariantGrid';
-import handleKeyboardInput from '../helpers/handleKeyboardInput';
-import SudokuCell from './SudokuCell';
-import Gamestate from '../interfaces/GameState';
+import { useState } from 'react'
+import { sudoku_flat } from '../helpers/sudoku_text'
+import SudokuCell from './SudokuCell'
+import SudokuState from '../interfaces/SudokuState'
+import Settings from '../interfaces/Settings'
 
-const SudokuBoard = ({ controls, setControls, cells, setCells, settings}: {
-    cells: IState["cells"]
-    setCells: React.Dispatch<React.SetStateAction<IState["cells"]>>
+const fillSudokuidState = () => {
+	var sel: number[] = []
+	var val: (number | undefined)[] = new Array(81).fill(undefined)
+	var tmp: (number | undefined)[] = new Array(81).fill(undefined)
+	var pencil: (number[] | undefined)[] = new Array(81).fill(undefined)
+	var lft: boolean = false
+	var rgt: number[] = []
+	var rel: number[] = []
+	var pref: boolean[] = new Array(81).fill(false)
+	var err: boolean[] = new Array(81).fill(false)
 
-    controls: IState["controls"]
-    setControls: React.Dispatch<React.SetStateAction<IState["controls"]>>
+	for (let i = 0; i < sudoku_flat.length; i++) {
+		if (sudoku_flat[i] !== undefined) {
+			val[i] = sudoku_flat[i]
+			pref[i] = true
+		}
+	}
 
-    settings: IState["settings"]
-}) => {
+	var state_arr: SudokuState = {
+		selected: sel,
+		values: val,
+		temporaryValues: tmp,
+		pencilmarks: pencil,
+		leftClickDown: lft,
+		rightClickDown: rgt,
+		related: rel,
+		preFilled: pref,
+		error: err,
+		shiftDown: false,
+	}
 
-
-    var lst: number[] = []
-
-    var lst2:boolean[] = new Array(81).fill(false)
-
-    var tst:Gamestate = {
-        filled: lst2,
-        selected: lst,
-        leftClickDown:false,
-        shiftDown:false
-    }
-
-    const [selected, setSelected] = useState(lst)
-    const [leftClickDown, setLeftClickDown] = useState(false)
-
-    const [filled, setFilled] = useState(lst2)
-
-    var elem:JSX.Element[] = []
-    
-    cells.map((cell)=> {
-        elem.push(
-            <g className="cell-group" key={cell.index}>
-                <SudokuCell filled={filled} setFilled={setFilled} settings ={settings} rectCell = {cell} selected={selected} setSelected={setSelected} cells = {cells} setCells = {setCells} leftClickDown={leftClickDown} setLeftClickDown={setLeftClickDown} />
-                <Variant cell={cell} isThermo={settings.isThermo} isArrow={settings.isArrow} isPalindrome={settings.isPalindrome}></Variant>
-                <SudokuNumbers column={cell.column} row={cell.row} value={cell.value}></SudokuNumbers>
-                <PencilMarks isprefilled={cell.isPreFilled} column={cell.column} row={cell.row} value={cell.pencil} index={cell.index}></PencilMarks>
-                <MouseSelector index={cell.index} selected={selected} temporaryValue={cell.temporaryValue} column={cell.column} row={cell.row} isRightClick={cell.isRightClick}></MouseSelector>
-            </g>)
-    })
-    return (
-        <g className="cells" onKeyDown={(e) => handleKeyboardInput(filled, setFilled, settings, e, selected, setSelected, cells, setCells)} tabIndex={0} 
-        // onMouseLeave={() => mouseReleased(100, undefined)}
-        >
-            {elem}
-        </g>
-    )
+	return state_arr
 }
 
-export default SudokuBoard;
+const SudokuBoard = ({ settings }: { settings: Settings }) => {
+	const [sudokuState, setSudokuState] = useState(fillSudokuidState)
+
+	var elem: JSX.Element[] = []
+
+	for (let i = 0; i < 81; i++) {
+		elem.push(
+			<SudokuCell
+				key={i}
+				sudokuState={sudokuState}
+				setSudokuState={setSudokuState}
+				index={i}
+			/>
+		)
+	}
+
+	return (
+		<g
+			className="cells"
+			tabIndex={0}
+			// onMouseLeave={() => mouseReleased(100, undefined)}
+		>
+			{elem}
+		</g>
+	)
+}
+
+export default SudokuBoard

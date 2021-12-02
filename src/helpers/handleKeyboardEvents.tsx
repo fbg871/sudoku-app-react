@@ -2,35 +2,18 @@ import React from 'react'
 import SudokuState from '../interfaces/SudokuState'
 import { validCodes, validInputs } from '../interfaces/validInputs'
 import errorCheck from './errorCheck'
-
-const convertCodetoNumber = (code: string) => {
-	if (code === 'Digit1') {
-		return 1
-	} else if (code === 'Digit2') {
-		return 2
-	} else if (code === 'Digit3') {
-		return 3
-	} else if (code === 'Digit4') {
-		return 4
-	} else if (code === 'Digit5') {
-		return 5
-	} else if (code === 'Digit6') {
-		return 6
-	} else if (code === 'Digit7') {
-		return 7
-	} else if (code === 'Digit8') {
-		return 8
-	} else if (code === 'Digit9') {
-		return 9
-	}
-}
+import { convertCodetoNumber } from './convertCodetoNumber'
+import GridState from '../interfaces/GridState'
 
 const navigateWithArrows = (
 	sudokuState: SudokuState,
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>,
-	event: React.KeyboardEvent<SVGGElement>
+	event: React.KeyboardEvent<SVGGElement>,
+	gridState: GridState,
+	setGridState: React.Dispatch<React.SetStateAction<GridState>>
 ) => {
 	let sudokuState_copy = Object.assign({}, sudokuState)
+	let gridState_copy: GridState = Object.assign({}, gridState)
 
 	event.preventDefault()
 
@@ -39,20 +22,33 @@ const navigateWithArrows = (
 
 		if (event.key === 'ArrowUp' && sudokuState.selected[endIndex] > 8) {
 			sudokuState_copy.selected.push(sudokuState.selected[endIndex] - 9)
+			if (!gridState.selected.includes(gridState.selected[endIndex] - 9)) {
+				gridState_copy.selected.push(gridState.selected[endIndex] - 9)
+			}
 		} else if (
 			event.key === 'ArrowRight' &&
 			sudokuState.selected[endIndex] % 9 !== 8
 		) {
 			sudokuState_copy.selected.push(sudokuState.selected[endIndex] + 1)
+			if (!gridState.selected.includes(gridState.selected[endIndex] + 1)) {
+				gridState_copy.selected.push(gridState.selected[endIndex] + 1)
+			}
 		} else if (
 			event.key === 'ArrowLeft' &&
 			sudokuState.selected[endIndex] % 9 !== 0
 		) {
 			sudokuState_copy.selected.push(sudokuState.selected[endIndex] - 1)
+			if (!gridState.selected.includes(gridState.selected[endIndex] - 1)) {
+				gridState_copy.selected.push(gridState.selected[endIndex] - 1)
+			}
 		} else if (event.key === 'ArrowDown' && sudokuState.selected[endIndex] < 72) {
 			sudokuState_copy.selected.push(sudokuState.selected[endIndex] + 9)
+			if (!gridState.selected.includes(gridState.selected[endIndex] + 9)) {
+				gridState_copy.selected.push(gridState.selected[endIndex] + 9)
+			}
 		}
 		setSudokuState(sudokuState_copy)
+		setGridState(gridState_copy)
 	} else {
 		let endIndex = sudokuState.selected.length - 1
 
@@ -98,7 +94,9 @@ const navigateWithArrows = (
 const setValue = (
 	sudokuState: SudokuState,
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>,
-	event: React.KeyboardEvent<SVGGElement>
+	event: React.KeyboardEvent<SVGGElement>,
+	gridState: GridState,
+	setGridState: React.Dispatch<React.SetStateAction<GridState>>
 ) => {
 	let sudokuState_copy = Object.assign({}, sudokuState)
 	sudokuState_copy.values[sudokuState.selected[0]] = parseInt(event.key)
@@ -115,7 +113,9 @@ const setValue = (
 const setPencil = (
 	sudokuState: SudokuState,
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>,
-	event: React.KeyboardEvent<SVGGElement>
+	event: React.KeyboardEvent<SVGGElement>,
+	gridState: GridState,
+	setGridState: React.Dispatch<React.SetStateAction<GridState>>
 ) => {
 	let sudokuState_copy = Object.assign({}, sudokuState)
 
@@ -171,7 +171,9 @@ const setPencil = (
 const deleteAll = (
 	sudokuState: SudokuState,
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>,
-	event: React.KeyboardEvent<SVGGElement>
+	event: React.KeyboardEvent<SVGGElement>,
+	gridState: GridState,
+	setGridState: React.Dispatch<React.SetStateAction<GridState>>
 ) => {
 	let sudokuState_copy = Object.assign({}, sudokuState)
 	sudokuState.selected.forEach((cell_index) => {
@@ -187,7 +189,9 @@ const deleteAll = (
 const newHandleKeyboardEvents = (
 	sudokuState: SudokuState,
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>,
-	event: React.KeyboardEvent<SVGGElement>
+	event: React.KeyboardEvent<SVGGElement>,
+	gridState: GridState,
+	setGridState: React.Dispatch<React.SetStateAction<GridState>>
 ) => {
 	if (validInputs.includes(parseInt(event.key)) || validCodes.includes(event.code)) {
 		if (
@@ -195,24 +199,34 @@ const newHandleKeyboardEvents = (
 			!sudokuState.preFilled[sudokuState.selected[0]] &&
 			event.shiftKey
 		) {
-			setPencil(sudokuState, setSudokuState, event)
+			setPencil(sudokuState, setSudokuState, event, gridState, setGridState)
 		} else if (
 			sudokuState.selected.length === 1 &&
 			!sudokuState.preFilled[sudokuState.selected[0]]
 		) {
-			setValue(sudokuState, setSudokuState, event)
+			setValue(sudokuState, setSudokuState, event, gridState, setGridState)
 		} else if (sudokuState.selected.length > 1) {
-			setPencil(sudokuState, setSudokuState, event)
+			setPencil(sudokuState, setSudokuState, event, gridState, setGridState)
 		}
 	} else if (event.key === 'Delete' || event.key === 'Backspace') {
-		deleteAll(sudokuState, setSudokuState, event)
+		deleteAll(sudokuState, setSudokuState, event, gridState, setGridState)
 	} else if (
 		event.key === 'ArrowUp' ||
 		event.key === 'ArrowDown' ||
 		event.key === 'ArrowRight' ||
 		event.key === 'ArrowLeft'
 	) {
-		navigateWithArrows(sudokuState, setSudokuState, event)
+		navigateWithArrows(sudokuState, setSudokuState, event, gridState, setGridState)
+	}
+}
+
+const undoState = (
+	history: SudokuState[],
+	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>
+) => {
+	if (history.length > 1) {
+		console.log('yup')
+		setSudokuState(history[0])
 	}
 }
 

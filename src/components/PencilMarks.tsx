@@ -17,19 +17,19 @@ const PencilMarks = ({
 		if (pencilmarks[index] !== undefined && pencilmarks[index]) {
 			pencilmarks[index]!.forEach((value) => {
 				if (value === 1 || value === 4 || value === 7) {
-					xpos = xpos + 7
+					xpos = xpos + 6
 				} else if (value === 2 || value === 5 || value === 8) {
-					xpos = xpos + 22
+					xpos = xpos + 21
 				} else {
-					xpos = xpos + 37
+					xpos = xpos + 36
 				}
 
 				if (value === 1 || value === 2 || value === 3) {
-					ypos = ypos + 15
+					ypos = ypos + 14
 				} else if (value === 4 || value === 5 || value === 6) {
 					ypos = ypos + 29
 				} else {
-					ypos = ypos + 43
+					ypos = ypos + 44
 				}
 				if (initialValue) {
 					textelements = [

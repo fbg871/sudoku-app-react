@@ -1,22 +1,35 @@
 import { motion, MotionConfigContext } from 'framer-motion'
 import React from 'react'
-import liftUpKey from '../helpers/lift'
 import { handleMouseMove, handleMouseRelease } from '../helpers/handleMouseEvents'
-import newIncrementTemporary from '../helpers/incrementTemporary'
+import incrementTemporary from '../helpers/incrementTemporary'
 import SudokuState from '../interfaces/SudokuState'
 import PencilMarks from './PencilMarks'
 import TemporaryPencilmarks from './TemporaryPencilmarks'
 import { handleMouseClick } from '../helpers/handleMouseEvents'
 import newHandleKeyboardEvents from '../helpers/handleKeyboardEvents'
+import SudokuStat from '../interfaces/SudokuStat'
+import GridState from '../interfaces/GridState'
 
 const SudokuCell = ({
 	sudokuState,
 	setSudokuState,
+	sudokuStat,
+	setSudokuStat,
+	gridState,
+	setGridState,
 	index,
+	history,
+	setHistory,
 }: {
 	sudokuState: SudokuState
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>
+	sudokuStat: SudokuStat
+	setSudokuStat: React.Dispatch<React.SetStateAction<SudokuStat>>
+	gridState: GridState
+	setGridState: React.Dispatch<React.SetStateAction<GridState>>
 	index: number
+	history: SudokuState[]
+	setHistory: React.Dispatch<React.SetStateAction<SudokuState[]>>
 }) => {
 	return (
 		<g className="cell-group" key={index}>
@@ -24,7 +37,7 @@ const SudokuCell = ({
 				className="sudoku-cell"
 				// key={cell.index}
 				data-isprefilled={sudokuState.preFilled[index]}
-				data-isselected={sudokuState.selected.includes(index)}
+				// data-isselected={sudokuState.selected.includes(index)}
 				data-isrelated={sudokuState.related.includes(index)}
 				data-isrightclick={sudokuState.rightClickDown.includes(index)}
 				data-error={sudokuState.error[index]}
@@ -33,13 +46,47 @@ const SudokuCell = ({
 				x={(index % 9) * 50}
 				width="50"
 				height="50"
-				onMouseDown={(e) => handleMouseClick(sudokuState, setSudokuState, e, index)}
-				onMouseMove={(e) => handleMouseMove(sudokuState, setSudokuState, e, index)}
-				onMouseUp={(e) => handleMouseRelease(sudokuState, setSudokuState, e, index)}
-				onWheel={(e) => newIncrementTemporary(e, sudokuState, setSudokuState)}
+				onMouseDown={(e) =>
+					handleMouseClick(
+						sudokuState,
+						setSudokuState,
+						e,
+						index,
+						gridState,
+						setGridState
+					)
+				}
+				onMouseMove={(e) =>
+					handleMouseMove(
+						sudokuState,
+						setSudokuState,
+						e,
+						index,
+						gridState,
+						setGridState
+					)
+				}
+				onMouseUp={(e) =>
+					handleMouseRelease(
+						sudokuState,
+						setSudokuState,
+						e,
+						index,
+						gridState,
+						setGridState
+					)
+				}
+				onWheel={(e) => incrementTemporary(e, sudokuState, setSudokuState)}
 				onContextMenu={(e) => e.preventDefault()}
-				onKeyDown={(e) => newHandleKeyboardEvents(sudokuState, setSudokuState, e)}
-				onKeyUp={(e) => liftUpKey(e, sudokuState, setSudokuState)}
+				onKeyDown={(e) =>
+					newHandleKeyboardEvents(
+						sudokuState,
+						setSudokuState,
+						e,
+						gridState,
+						setGridState
+					)
+				}
 				tabIndex={0}
 			/>
 			<text

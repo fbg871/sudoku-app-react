@@ -5,32 +5,23 @@ const newIncrementTemporary = (
 	sudokuState: SudokuState,
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>
 ) => {
+	event.preventDefault()
 	let sudokuState_copy: SudokuState = Object.assign({}, sudokuState)
 
 	if (sudokuState.rightClickDown.length === 1) {
 		if (event.nativeEvent.deltaY < 0) {
-			if (
-				sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === undefined
-			) {
+			if (sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === undefined) {
 				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] = 1
-			} else if (
-				sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === 9
-			) {
-				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] =
-					undefined
+			} else if (sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === 9) {
+				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] = undefined
 			} else {
 				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]]!++
 			}
 		} else {
-			if (
-				sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === undefined
-			) {
+			if (sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === undefined) {
 				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] = 9
-			} else if (
-				sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === 1
-			) {
-				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] =
-					undefined
+			} else if (sudokuState.temporaryValues[sudokuState.rightClickDown[0]] === 1) {
+				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]] = undefined
 			} else {
 				sudokuState_copy.temporaryValues[sudokuState.rightClickDown[0]]!--
 			}
@@ -41,8 +32,7 @@ const newIncrementTemporary = (
 			if (event.nativeEvent.deltaY < 0) {
 				// let tmp_copy = temporaryValues.slice()
 				if (
-					sudokuState.temporaryValues[sudokuState.rightClickDown[i]] ===
-					undefined
+					sudokuState.temporaryValues[sudokuState.rightClickDown[i]] === undefined
 				) {
 					sudokuState_copy.temporaryValues[sudokuState.rightClickDown[i]] = 1
 				} else if (
@@ -54,8 +44,7 @@ const newIncrementTemporary = (
 				}
 			} else {
 				if (
-					sudokuState.temporaryValues[sudokuState.rightClickDown[i]] ===
-					undefined
+					sudokuState.temporaryValues[sudokuState.rightClickDown[i]] === undefined
 				) {
 					// let tmp_copy = temporaryValues.slice()
 					sudokuState_copy.temporaryValues[sudokuState.rightClickDown[i]] = 9

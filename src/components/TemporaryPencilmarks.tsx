@@ -16,19 +16,19 @@ const TemporaryPencilmarks = ({
 
 	if (!isprefilled && temporary !== undefined) {
 		if (temporary === 1 || temporary === 4 || temporary === 7) {
-			xpos = xpos + 7
+			xpos = xpos + 6
 		} else if (temporary === 2 || temporary === 5 || temporary === 8) {
-			xpos = xpos + 22
+			xpos = xpos + 21
 		} else {
-			xpos = xpos + 37
+			xpos = xpos + 36
 		}
 
 		if (temporary === 1 || temporary === 2 || temporary === 3) {
-			ypos = ypos + 15
+			ypos = ypos + 14
 		} else if (temporary === 4 || temporary === 5 || temporary === 6) {
 			ypos = ypos + 29
 		} else {
-			ypos = ypos + 43
+			ypos = ypos + 44
 		}
 	}
 

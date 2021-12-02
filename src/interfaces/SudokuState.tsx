@@ -8,5 +8,4 @@ export default interface SudokuState {
 	related: number[]
 	preFilled: boolean[]
 	error: boolean[]
-	shiftDown: boolean
 }

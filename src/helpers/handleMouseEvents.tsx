@@ -1,4 +1,5 @@
 import React from 'react'
+import GridState from '../interfaces/GridState'
 import SudokuState from '../interfaces/SudokuState'
 // import newErrorCheck from './newErrorCheck'
 
@@ -6,10 +7,12 @@ export const handleMouseClick = (
 	sudokuState: SudokuState,
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>,
 	event: React.MouseEvent<SVGRectElement, MouseEvent>,
-	index: number
+	index: number,
+	gridState: GridState,
+	setGridState: React.Dispatch<React.SetStateAction<GridState>>
 ) => {
 	let sudokuState_copy: SudokuState = Object.assign({}, sudokuState)
-
+	let gridState_copy: GridState = Object.assign({}, gridState)
 	// If left button clicked
 	if (event.button === 0) {
 		if (
@@ -18,10 +21,12 @@ export const handleMouseClick = (
 		) {
 			sudokuState_copy.leftClickDown = true
 			sudokuState_copy.selected.push(index)
+			gridState_copy.selected.push(index)
 		} else {
 			sudokuState_copy.leftClickDown = true
 
 			sudokuState_copy.selected = [index]
+			gridState_copy.selected = [index]
 		}
 	}
 
@@ -37,6 +42,7 @@ export const handleMouseClick = (
 				sudokuState_copy.pencilmarks[sudokuState.selected[0]] = undefined
 			} else if (!sudokuState.preFilled[index]) {
 				sudokuState_copy.selected = [index]
+				gridState_copy.selected = [index]
 			}
 		} else if (sudokuState.selected.length > 1) {
 			if (sudokuState.selected.includes(index)) {
@@ -48,6 +54,7 @@ export const handleMouseClick = (
 				}
 			} else if (!sudokuState.preFilled[index]) {
 				sudokuState_copy.selected = [index]
+				gridState_copy.selected = [index]
 			}
 		}
 	}
@@ -58,17 +65,25 @@ export const handleMouseClick = (
 		if (sudokuState.selected.length > 1) {
 			if (sudokuState.selected.includes(index)) {
 				// for (let i = 0; i < sudokuState.selected.length; i++) {
-				// 	if ((i = 0)) {
-				// 		sudokuState.rightClickDown = []
-				// 	}
+				// 	console.log(i)
+				// 	if (!sudokuState.preFilled[sudokuState.selected[i]])
+				// 		if ((i = 0)) {
+				// 			sudokuState_copy.rightClickDown = [sudokuState.selected[i]]
+				// 		} else {
+				// 			sudokuState_copy.rightClickDown.push(sudokuState.selected[i])
+				// 		}
+				// }
 				// 	if (!sudokuState.preFilled[sudokuState.selected[i]]) {
 				// 		sudokuState.rightClickDown.push(sudokuState.selected[i])
 				// 	}
 				// }
 				sudokuState_copy.rightClickDown = sudokuState.selected
+				gridState_copy.rightClickDown = gridState_copy.selected
 			} else if (!sudokuState.preFilled[index]) {
 				sudokuState_copy.selected = [index]
 				sudokuState_copy.rightClickDown = [index]
+				gridState_copy.selected = [index]
+				gridState_copy.rightClickDown = [index]
 			}
 		} else if (
 			sudokuState.selected.length === 1 &&
@@ -88,10 +103,13 @@ export const handleMouseClick = (
 				if (!sudokuState.preFilled[index]) {
 					sudokuState_copy.selected = [index]
 					sudokuState_copy.rightClickDown = [index]
+					gridState_copy.selected = [index]
+					gridState_copy.rightClickDown = [index]
 				}
 			}
 		}
 	}
+	setGridState(gridState_copy)
 	setSudokuState(sudokuState_copy)
 }
 
@@ -99,14 +117,19 @@ export const handleMouseMove = (
 	sudokuState: SudokuState,
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>,
 	event: React.MouseEvent<SVGRectElement, MouseEvent>,
-	index: number
+	index: number,
+	gridState: GridState,
+	setGridState: React.Dispatch<React.SetStateAction<GridState>>
 ) => {
 	let sudokuState_copy: SudokuState = Object.assign({}, sudokuState)
+	let gridState_copy: GridState = Object.assign({}, gridState)
 
 	if (sudokuState.leftClickDown && !sudokuState.preFilled[index]) {
 		if (!sudokuState.selected.includes(index)) {
 			sudokuState_copy.selected.push(index)
+			gridState_copy.selected.push(index)
 			setSudokuState(sudokuState_copy)
+			setGridState(gridState_copy)
 		}
 	}
 }
@@ -115,15 +138,20 @@ export const handleMouseRelease = (
 	sudokuState: SudokuState,
 	setSudokuState: React.Dispatch<React.SetStateAction<SudokuState>>,
 	event: React.MouseEvent<SVGRectElement, MouseEvent>,
-	index: number
+	index: number,
+	gridState: GridState,
+	setGridState: React.Dispatch<React.SetStateAction<GridState>>
 ) => {
 	let sudokuState_copy: SudokuState = Object.assign({}, sudokuState)
+	let gridState_copy: GridState = Object.assign({}, gridState)
 
 	// If left click is released
 	if (event.button === 0) {
 		sudokuState_copy.leftClickDown = false
+		gridState_copy.leftClickDown = false
 		if (!sudokuState.selected.includes(index) && !sudokuState.preFilled[index]) {
 			sudokuState_copy.selected.push(index)
+			gridState_copy.selected.push(index)
 		}
 	}
 	// If middle click is released
